@@ -3,10 +3,26 @@ const pool = require('../../DL/db');
 
 // כל הפוסטים
 async function getAllPosts() {
-    const SQL = `SELECT posts.id, posts.userId, posts.topic,posts.subtopic, posts.title, posts.body, posts.created_at, posts.score / posts.num_raters as "rating", GROUP_CONCAT(tags.name) AS tags
-    FROM posts
-    LEFT JOIN 
-    tags ON posts.id = tags.postId GROUP BY posts.id`;
+    const SQL = `SELECT 
+    posts.id, 
+    posts.userId, 
+    posts.topic,
+    posts.subtopic, 
+    posts.title, 
+    posts.body, 
+    posts.created_at, 
+    posts.score / posts.num_raters as "rating", 
+    GROUP_CONCAT(tags.name) AS tags,
+    users.username AS author
+FROM 
+    posts
+LEFT JOIN 
+    tags ON posts.id = tags.postId 
+LEFT JOIN 
+    users ON posts.userId = users.id 
+GROUP BY 
+    posts.id;
+`;
     const [posts] = await pool.query(SQL);
     // console.log(posts);
     return posts;
@@ -73,11 +89,11 @@ async function searcById(id) {
 
 // עריכה
 async function editPost(postId, selectedBook, selectedPortion, title, body) {
-    console.log("tttttttttttttttttttttttt");
+    console.log("editPost in server", title);
     const SQL = `update posts set topic = ?,  subtopic = ?, title = ?, body = ?
     where id = ?`;
     const [respons] = await pool.query(SQL, [selectedBook, selectedPortion, title, body, postId]);
-    console.log(respons);
+    // console.log(respons);
     const updatedPost = await getCertainPost(postId)
     return updatedPost;
 }
@@ -124,6 +140,7 @@ async function updateRatingPost(postId, userId, newRating) {
 
 // מחיקה
 async function deletePost(postId) {
+    
     const deletedPost = await getCertainPost(postId)
     const SQL = `delete from posts where id = ?`;
     const [respons] = await pool.query(SQL, [postId]);

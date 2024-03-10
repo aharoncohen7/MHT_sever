@@ -117,6 +117,7 @@ postsRoute.post("/", IAM.handleNewPost, async (req, res) => {
 
 // Editing post
 postsRoute.patch("/:postId", IAM.validationParams, IAM.handleEditPost, async (req, res) => {
+    console.log("edit");
     try {
         // לבדוק אם זה הכרחי
         // const oldPost = await db.getCertainPost(req.params.postId);
@@ -134,8 +135,8 @@ postsRoute.patch("/:postId", IAM.validationParams, IAM.handleEditPost, async (re
             return;
         }
 
-        const editedPost = await db.editPost( req.params.postId, req.body.selectedBook,req.body.selectedPortion, req.body.title, req.body.body);
-        console.log("tttttttttttttttttttttttt");
+        const editedPost = await db.editPost(req.params.postId, req.body.selectedBook,req.body.selectedPortion, req.body.title, req.body.body);
+        console.log("");
         if (editedPost) {
             if (req.body.tags) {
                 const tags = await addTagsToPost(editedPost.id, req.body.tags);
@@ -185,31 +186,38 @@ postsRoute.patch("/rating/:postId", IAM.validationParams, IAM.handleRatingUpdati
 
 // Deleting post
 postsRoute.delete("/:postId", IAM.validationParams, async (req, res) => {
-    console.log(req.body);
+    console.log(req.body,req.params);
+    
     
     try {
         const post = await db.getCertainPost(parseInt(req.params.postId));
-        
         if (!post) {
             res.status(404).send();
             return;
         }
+     
         // if (req.body.userIdFromToken !== post.userId) {
         //     res.status(400).send("You are not allowed to delete this post");
         //     return;
         // }
-        if (!req.body.isAdmin) {
+        if (req.body.isAdmin==0) {
+           
             res.status(400).send("משתמש לא מורשה");
             return;
         }
+        
         const deletedPost = await db.deletePost(parseInt(req.params.postId));
+        
         if (deletedPost) {
+            console.log("tttttttttttttttttttttttttttttttt");
             res.status(200).json(deletedPost);
             return;
         }
+        
         res.status(404).send();
         return;
     } catch (error) {
+        
         res.status(500).send(error.message);
     }
 });

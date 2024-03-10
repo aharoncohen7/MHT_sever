@@ -6,6 +6,11 @@ const db = require("../login/login.module");
 
 
 
+
+
+
+
+
 // login
 loginRoute.post("/", async (req, res) => {
     console.log("start login");
@@ -65,7 +70,16 @@ loginRoute.post("/", async (req, res) => {
 // });
 
 
-
+// בדיקת טוקן
+loginRoute.post("/checkToken",auth.validate, async (req, res) => {
+    console.log("frrrrrrrrrrrrrrrrrrrrrrrr");
+    console.log(req.body,"EEEEE")
+    const user = {
+        userId : req.body.userIdFromToken,
+        isAdmin : req.body.isAdmin
+    }
+        res.status(200).send(user); 
+})
 
 
 

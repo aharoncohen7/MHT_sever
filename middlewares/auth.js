@@ -12,11 +12,15 @@ async function generate(user) {
 // User authoreztion
 async function validate(req, res, next) {
     try {
+        console.log(req.body);
         let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || "null", SECRET)
         req.body.userIdFromToken = userFromToken.id;
-        req.body.isAdmin = userFromToken.isAdmin
+        req.body.isAdmin = userFromToken.isAdmin;
+        console.log(req.body);
+        // console.log(userFromToken.id,userFromToken.isAdmin, "ttt" );
         // const user = await getUser(userFromToken.id)
         // req.body.user = user;
+        
         next();
     } catch (err) {
         console.error(err);

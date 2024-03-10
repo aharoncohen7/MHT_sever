@@ -61,10 +61,13 @@ function isValidAuth(auth) {
 
 // Validation params
 function validationParams(req, res, next) {
+    console.log(req.params);
+    
     const schema = Joi.number().min(1).required();
     const { error } = schema.validate(req.params.postId || req.params.userId ||
          req.params.commentId);
     if (error) {
+        console.log(error.details[0].message);
         res.status(400).send(error.details[0].message);
         return
     }
