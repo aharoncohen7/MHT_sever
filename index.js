@@ -27,7 +27,7 @@ app.use("/api/posts", validate, postsRoute);
 app.use("/api/tags", validate, tagsRoute);
 app.use("/api/comments",validate, commentsRoute);
 
-const port = process.env.PORT || 4002;
+const port = process.env.DATABASE_PORT || 4002;
 
 app.listen(port, () => {
     console.log("server is running on port " + port);
