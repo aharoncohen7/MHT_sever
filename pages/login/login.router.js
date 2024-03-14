@@ -76,8 +76,6 @@ loginRoute.post("/checkToken", auth.validate, async (req, res) => {
 })
 
 
-
-
 // בדיקת תוקף טוקן
 loginRoute.post("/isTokenExpired", async (req, res) => {
     console.log(req.body.token);
@@ -117,14 +115,6 @@ loginRoute.post("/isTokenExpired", async (req, res) => {
 
 
 
-// async function getUsers() {
-//     const SQL = `SELECT * FROM defaultdb.users`
-//     const [user] = await pool.query(SQL);
-//     console.log(user);
-// }
-
-
-// getUsers()
 
 
 module.exports = loginRoute;

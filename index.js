@@ -27,19 +27,6 @@ app.use("/api/posts", validate, postsRoute);
 app.use("/api/tags", validate, tagsRoute);
 app.use("/api/comments",validate, commentsRoute);
 
-
-// בדיקה
-app.get("/", async (req, res) => {
-    try {
-        const SQL = `SELECT * FROM defaultdb`; // Replace with your query
-        const [data] = await pool.query(SQL);
-        res.json(data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error fetching data");
-    }
-});
-
 const port = process.env.PORT || 4002;
 
 app.listen(port, () => {
