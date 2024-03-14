@@ -8,6 +8,15 @@ const dbConfig = {
     password: process.env.DATABASE_PASSWORD
 }
 
+
+// const dbConfig = {
+//     host: "vortly-mysql-vortly-mysql.a.aivencloud.com",
+//     user: "avnadmin",
+//     database: "defaultdb",
+//     password: "AVNS_WuRwJsB47uljEAPF5jv"
+// }
+
+
 const pool = sql.createPool({
     host: dbConfig.host,
     user: dbConfig.user,
@@ -15,17 +24,10 @@ const pool = sql.createPool({
     password: dbConfig.password
 });
 
-// async function getUsers(username, password) {
-//     const SQL = `SELECT * FROM defaultdb.users`
-//     const [user] = await pool.query(SQL);
-//     console.log(user);
-// }
 
 
-// getUsers()
 
-
-// console.log("create pool" ,dbConfig.host,dbConfig.user, dbConfig.database, dbConfig.password);
+console.log("create pool" ,dbConfig.host,dbConfig.user, dbConfig.database, dbConfig.password);
 
 module.exports = pool
 

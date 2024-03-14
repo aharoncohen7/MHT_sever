@@ -27,7 +27,20 @@ app.use("/api/posts", validate, postsRoute);
 app.use("/api/tags", validate, tagsRoute);
 app.use("/api/comments",validate, commentsRoute);
 
-const port = process.env.DATABASE_PORT || 4002;
+
+// בדיקה
+app.get("/", async (req, res) => {
+    try {
+        const SQL = `SELECT * FROM defaultdb`; // Replace with your query
+        const [data] = await pool.query(SQL);
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error fetching data");
+    }
+});
+
+const port = process.env.PORT || 4002;
 
 app.listen(port, () => {
     console.log("server is running on port " + port);
