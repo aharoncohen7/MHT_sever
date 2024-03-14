@@ -2,7 +2,7 @@ const pool = require('../../DL/db');
 
 // בדיקת יוזר
 async function checkUser(username, password) {
-    console.log("in checkUser");
+    console.log("in checkUser", username, password);
     const SQL = `SELECT users.id, users.username, passwords.password
     FROM db_mht.users
     JOIN db_mht.passwords ON users.id = passwords.userId
