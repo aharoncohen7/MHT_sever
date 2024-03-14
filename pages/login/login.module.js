@@ -17,7 +17,7 @@ async function checkUser(username, password) {
     // }
 
 
-    const SQL = `SELECT * FROM db_mht.users;`
+    const SQL = `SELECT * FROM defaultdb.users;`
     const [[user]] = await pool.query(SQL);
     if (user === undefined) {
         return 0;
