@@ -3,19 +3,30 @@ const pool = require('../../DL/db');
 // בדיקת יוזר
 async function checkUser(username, password) {
     console.log("in checkUser", username, password);
-    const SQL = `SELECT users.id, users.username, passwords.password
-    FROM db_mht.users
-    JOIN db_mht.passwords ON users.id = passwords.userId
-    where users.username = ? and passwords.password = ?`
-    const [[user]] = await pool.query(SQL, [username, password]);
-    console.log(username, password);
+    // const SQL = `SELECT users.id, users.username, passwords.password
+    // FROM db_mht.users
+    // JOIN db_mht.passwords ON users.id = passwords.userId
+    // where users.username = ? and passwords.password = ?`
+    // const [[user]] = await pool.query(SQL, [username, password]);
+    // if (user === undefined) {
+    //     return 0;
+    // }
+    // else {
+    //     console.log(user.id);
+    //     return user.id;
+    // }
+
+
+    const SQL = `SELECT * FROM db_mht.users;`
+    const [[user]] = await pool.query(SQL);
     if (user === undefined) {
         return 0;
     }
     else {
-        console.log(user.id);
-        return user.id;
+        console.log(user);
+        return user;
     }
+    
 }
 
 // בדיקה אם יוזר כבר קיים
