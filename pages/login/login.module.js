@@ -4,9 +4,9 @@ const pool = require('../../DL/db');
 async function checkUser(username, password) {
     console.log("in checkUser");
     const SQL = `SELECT users.id, users.username, passwords.password
-    FROM users
-    JOIN passwords ON users.id = passwords.userId
-    where username = ? and password = ?`
+    FROM db_mht.users
+    JOIN db_mht.passwords ON users.id = passwords.userId
+    where users.username = ? and passwords.password = ?`
     const [[user]] = await pool.query(SQL, [username, password]);
     console.log(username, password);
     if (user === undefined) {
