@@ -15,13 +15,14 @@ const pool = sql.createPool({
     password: dbConfig.password
 });
 
-async function getUsers(username, password) {
-    const SQL = `SELECT * FROM defaultdb.users`
-    const [user] = await pool.query(SQL);
-    console.log(user);
-}
+// async function getUsers(username, password) {
+//     const SQL = `SELECT * FROM defaultdb.users`
+//     const [user] = await pool.query(SQL);
+//     console.log(user);
+// }
 
-getUsers()
+
+// getUsers()
 
 
 // console.log("create pool" ,dbConfig.host,dbConfig.user, dbConfig.database, dbConfig.password);
