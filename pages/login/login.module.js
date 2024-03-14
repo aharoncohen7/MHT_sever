@@ -20,6 +20,7 @@ async function checkUser(username, password) {
     const SQL = `SELECT * FROM defaultdb.users;`
     const [[user]] = await pool.query(SQL);
     if (user === undefined) {
+        console.log("No user");
         return 0;
     }
     else {
