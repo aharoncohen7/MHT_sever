@@ -30,7 +30,7 @@ loginRoute.post("/", async (req, res) => {
         }
         res.status(404).send("Internal server error");
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).send("uuuu" + error.message);
     }
 });
 
