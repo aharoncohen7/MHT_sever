@@ -15,6 +15,15 @@ const pool = sql.createPool({
     password: dbConfig.password
 });
 
+async function getUsers(username, password) {
+    const SQL = `SELECT * FROM defaultdb.users`
+    const [user] = await pool.query(SQL);
+    console.log(user);
+}
+
+getUsers()
+
+
 // console.log("create pool" ,dbConfig.host,dbConfig.user, dbConfig.database, dbConfig.password);
 
 module.exports = pool
