@@ -1,5 +1,5 @@
 const cors = require("cors");
-const { authenticate } = require('./middlewares/monitoring');
+// const { authenticate } = require('./middlewares/monitoring');
 const { validate } = require('./middlewares/auth');
 const express = require("express");
 require("dotenv").config();

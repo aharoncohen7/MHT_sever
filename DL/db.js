@@ -5,7 +5,9 @@ const dbConfig = {
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     database: process.env.DATABASE_DBNAME,
-    password: process.env.DATABASE_PASSWORD
+    password: process.env.DATABASE_PASSWORD,
+    port: process.env.DATABASE_PORT,
+
 }
 
 
@@ -21,21 +23,28 @@ const pool = sql.createPool({
     host: dbConfig.host,
     user: dbConfig.user,
     database: dbConfig.database,
-    password: dbConfig.password
+    password: dbConfig.password,
+    port: dbConfig.port,
+    connectTimeout: 60000
 });
 
 
 async function getAllUsers() {
-    const SQL = `SELECT *
-    FROM depaultdb.users`;
-    const [user] = await pool.query(SQL);
-    console.log(user.id);
-    pool.end()
-}
+    const SQL = `SELECT * FROM depaultdb.users`;
+  
+    try {
+      const [users] = await pool.query(SQL);
+      console.log(users);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      pool.end(); // אם אתה רוצה לנתק את כל החיבורים בסוף
+    }
+  }
 
 
 
-console.log("create pool", dbConfig.host, dbConfig.user, dbConfig.database, dbConfig.password);
+console.log("create pool", dbConfig.host, dbConfig.user, dbConfig.database, dbConfig.password, dbConfig.port);
 
 getAllUsers()
 
