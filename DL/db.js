@@ -26,8 +26,10 @@ const pool = sql.createPool({
 
 
 
-
 console.log("create pool" ,dbConfig.host,dbConfig.user, dbConfig.database, dbConfig.password);
+
+
+// pool.end()
 
 module.exports = pool
 
