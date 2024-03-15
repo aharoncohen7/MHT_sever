@@ -30,7 +30,7 @@ const pool = sql.createPool({
 
 
 async function getAllUsers() {
-    const SQL = `SELECT * FROM depaultdb.users`;
+    const SQL = `SELECT * FROM defaultdb.users`;
   
     try {
       const [users] = await pool.query(SQL);
