@@ -30,7 +30,7 @@ loginRoute.post("/", async (req, res) => {
         }
         res.status(404).send("Internal server error");
     } catch (error) {
-        res.status(500).send("uuuu" + error.message);
+        res.status(500).send("error.message: " + error.message);
     }
 });
 
@@ -67,7 +67,7 @@ loginRoute.post("/", async (req, res) => {
 
 // בדיקת טוקן
 loginRoute.post("/checkToken", auth.validate, async (req, res) => {
-    console.log(req.body, "EEEEE")
+    console.log(req.body, "checkToken")
     const user = {
         userId: req.body.userIdFromToken,
         isAdmin: req.body.isAdmin

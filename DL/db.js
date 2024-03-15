@@ -12,10 +12,11 @@ const dbConfig = {
 
 
 // const dbConfig = {
-//     host: "vortly-mysql-vortly-mysql.a.aivencloud.com",
-//     user: "avnadmin",
-//     database: "defaultdb",
-//     password: "AVNS_WuRwJsB47uljEAPF5jv"
+//     host: "localhost",
+//     user: "root",
+//     database: "db_mht",
+//     password: "43534613",
+//     port: 3306
 // }
 
 

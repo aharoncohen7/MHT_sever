@@ -5,7 +5,7 @@ const { log } = require("console");
 //Get specific user
 async function getUser(id) {
     // console.log("in getUser() ");
-    const SQL = `select * from users where id = ?`;
+    const SQL = `select * from defaultdb.users where defaultdb.users.id = ?`;
     const [[user]] = await pool.query(SQL, [id]); 
     // console.log(user);
     return user;
