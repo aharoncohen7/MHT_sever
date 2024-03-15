@@ -25,11 +25,21 @@ const pool = sql.createPool({
 });
 
 
+async function getAllUsers() {
+    const SQL = `SELECT *
+    FROM depaultdb.users`;
+    const [user] = await pool.query(SQL);
+    console.log(user.id);
+    pool.end()
+}
 
-console.log("create pool" ,dbConfig.host,dbConfig.user, dbConfig.database, dbConfig.password);
 
 
-// pool.end()
+console.log("create pool", dbConfig.host, dbConfig.user, dbConfig.database, dbConfig.password);
+
+getAllUsers()
+
+
 
 module.exports = pool
 
