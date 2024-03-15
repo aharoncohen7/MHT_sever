@@ -31,7 +31,6 @@ const pool = sql.createPool({
 
 async function getAllUsers() {
     const SQL = `SELECT * FROM defaultdb.users`;
-  
     try {
       const [users] = await pool.query(SQL);
       console.log(users);
@@ -44,9 +43,9 @@ async function getAllUsers() {
 
 
 
-console.log("create pool", dbConfig.host, dbConfig.user, dbConfig.database, dbConfig.password, dbConfig.port);
+console.log("create pool");
 
-getAllUsers()
+// getAllUsers()
 
 
 
