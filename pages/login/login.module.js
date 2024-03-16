@@ -65,7 +65,7 @@ async function getUser(id) {
 
 
 async function test() {
-    const data = await getUser(11)
+    const data = await getUser(37)
     console.log(data);
 }
 // test()

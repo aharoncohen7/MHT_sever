@@ -29,6 +29,8 @@ app.use("/api/comments",validate, commentsRoute);
 
 const port = process.env.PORT || 4002;
 
+// console.log(process.env.PORT);
+
 app.listen(port, () => {
     console.log("server is running on port " + port);
 });
