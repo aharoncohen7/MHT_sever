@@ -187,8 +187,6 @@ postsRoute.patch("/rating/:postId", IAM.validationParams, IAM.handleRatingUpdati
 // Deleting post
 postsRoute.delete("/:postId", IAM.validationParams, async (req, res) => {
     console.log(req.body,req.params);
-    
-    
     try {
         const post = await db.getCertainPost(parseInt(req.params.postId));
         if (!post) {
@@ -209,7 +207,7 @@ postsRoute.delete("/:postId", IAM.validationParams, async (req, res) => {
         const deletedPost = await db.deletePost(parseInt(req.params.postId));
         
         if (deletedPost) {
-            console.log("tttttttttttttttttttttttttttttttt");
+            console.log("the post was deleted");
             res.status(200).json(deletedPost);
             return;
         }
@@ -221,6 +219,32 @@ postsRoute.delete("/:postId", IAM.validationParams, async (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+
+
+// Deleting array of posts
+postsRoute.delete("/delete-multiple", IAM.validationArray, async (req, res) => {
+    console.log(req.body,req.params);
+    try {
+        if (req.body.isAdmin==0) {  
+            res.status(400).send("משתמש לא מורשה");
+            return;
+        }
+        const isSuccessfulDeletion = await db.deleteMultiplePosts(req.body.postList);
+        if (isSuccessfulDeletion) {
+            console.log("the postlist has been deleted");
+            res.sendStatus(200);
+            return;
+        }
+        
+        res.status(404).send();
+        return;
+    } catch (error) {
+        
+        res.status(500).send(error.message);
+    }
+});
+
 
 module.exports = postsRoute;
 

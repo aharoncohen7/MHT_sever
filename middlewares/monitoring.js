@@ -62,7 +62,6 @@ function isValidAuth(auth) {
 // Validation params
 function validationParams(req, res, next) {
     console.log(req.params);
-    
     const schema = Joi.number().min(1).required();
     const { error } = schema.validate(req.params.postId || req.params.userId ||
          req.params.commentId);
@@ -73,6 +72,21 @@ function validationParams(req, res, next) {
     }
     next();
 };
+
+
+   // אימות 'postList'
+function validationArray(req, res, next) {
+    console.log(req.body.postList);
+    const schema = Joi.array().items(Joi.number().min(1).required());
+    const { error } = schema.validate(req.body.postList);
+    if (error) {
+      console.log(error.details[0].message);
+      res.status(400).send(error.details[0].message);
+      return;
+    }
+    next();
+  }
+  
 
 
 // Validation params
@@ -213,6 +227,7 @@ module.exports = {
     getUser,
     handleNewUser,
     validationParams,
+    validationArray,
     validationParamsStr,
     handleNewPost,
     handleEditPost,
