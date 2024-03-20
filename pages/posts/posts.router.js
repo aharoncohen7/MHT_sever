@@ -185,7 +185,7 @@ postsRoute.patch("/rating/:postId", IAM.validationParams, IAM.handleRatingUpdati
 );
 
 // Deleting post
-postsRoute.delete("/:postId", IAM.validationParams, async (req, res) => {
+postsRoute.delete("/delete-single/:postId", IAM.validationParams, async (req, res) => {
     console.log(req.body,req.params);
     try {
         const post = await db.getCertainPost(parseInt(req.params.postId));
