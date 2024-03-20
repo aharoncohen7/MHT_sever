@@ -76,11 +76,12 @@ function validationParams(req, res, next) {
 
    // אימות 'postList'
 function validationArray(req, res, next) {
+    console.log("validationArray");
     console.log(req.body.postList);
     const schema = Joi.array().items(Joi.number().min(1).required());
     const { error } = schema.validate(req.body.postList);
     if (error) {
-      console.log(error.details[0].message);
+      console.log("myaError: " + error.details[0].message);
       res.status(400).send(error.details[0].message);
       return;
     }

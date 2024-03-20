@@ -225,6 +225,7 @@ postsRoute.delete("/:postId", IAM.validationParams, async (req, res) => {
 // Deleting array of posts
 postsRoute.delete("/delete-multiple", IAM.validationArray, async (req, res) => {
     console.log(req.body,req.params);
+    
     try {
         if (req.body.isAdmin==0) {  
             res.status(400).send("משתמש לא מורשה");
