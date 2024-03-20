@@ -148,7 +148,7 @@ async function deletePost(postId) {
 
 
 async function deleteMultiplePosts(idsToDelete) {
-    const query = `DELETE FROM table_name WHERE id IN (?)`;
+    const query = `DELETE FROM posts WHERE id IN (?)`;
     const [respons] = await pool.query(query, [idsToDelete]);
     console.log(respons);
     return true;
