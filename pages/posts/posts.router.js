@@ -3,6 +3,7 @@ const db = require("../posts/posts.module");
 const { addTagsToPost } = require("../tags/tags.module");
 const IAM = require('../../middlewares/monitoring');
 const postsRoute = express.Router();
+const { validate } = require('../../middlewares/auth');
 
 // Get all posts
 postsRoute.get("/", async (req, res) => {
@@ -75,7 +76,7 @@ postsRoute.get("/searcById/:postId", IAM.validationParams, async (req, res) => {
 });
 
 // Add new post
-postsRoute.post("/", IAM.handleNewPost, async (req, res) => { 
+postsRoute.post("/",validate, IAM.handleNewPost, async (req, res) => { 
    
     try {
         console.log(req.body.userIdFromToken);
@@ -116,7 +117,7 @@ postsRoute.post("/", IAM.handleNewPost, async (req, res) => {
 });
 
 // Editing post
-postsRoute.patch("/:postId", IAM.validationParams, IAM.handleEditPost, async (req, res) => {
+postsRoute.patch("/:postId",validate, IAM.validationParams, IAM.handleEditPost, async (req, res) => {
     console.log("edit");
     try {
         // לבדוק אם זה הכרחי
@@ -162,7 +163,7 @@ postsRoute.patch("/:postId", IAM.validationParams, IAM.handleEditPost, async (re
 });
 
 //  rating a post
-postsRoute.patch("/rating/:postId", IAM.validationParams, IAM.handleRatingUpdating, async (req, res) => {
+postsRoute.patch("/rating/:postId",validate, IAM.validationParams, IAM.handleRatingUpdating, async (req, res) => {
     console.log("ttttttttttttttttttt");
     try {
         const oldPost = await db.getCertainPost(req.params.postId);
@@ -185,7 +186,7 @@ postsRoute.patch("/rating/:postId", IAM.validationParams, IAM.handleRatingUpdati
 );
 
 // Deleting post
-postsRoute.delete("/delete-single/:postId", IAM.validationParams, async (req, res) => {
+postsRoute.delete("/delete-single/:postId", validate, IAM.validationParams, async (req, res) => {
     console.log(req.body,req.params);
     try {
         const post = await db.getCertainPost(parseInt(req.params.postId));
@@ -223,7 +224,7 @@ postsRoute.delete("/delete-single/:postId", IAM.validationParams, async (req, re
 
 
 // Deleting array of posts
-postsRoute.delete("/delete-multiple", IAM.validationArray, async (req, res) => {
+postsRoute.delete("/delete-multiple",validate, IAM.validationArray, async (req, res) => {
     console.log(req.body,req.params);
     
     try {

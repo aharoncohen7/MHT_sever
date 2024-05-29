@@ -23,8 +23,12 @@ app.use(express.json());
 app.use("/api/login", loginRoute);
 app.use("/api/registration", registrationRoute);
 app.use("/api/users", validate, usersRoute);
-app.use("/api/posts", validate, postsRoute);
-app.use("/api/tags", validate, tagsRoute);
+app.use("/api/posts",
+//  validate,
+  postsRoute);
+app.use("/api/tags",
+//  validate,
+  tagsRoute);
 app.use("/api/comments",validate, commentsRoute);
 
 const port = process.env.PORT || 4002;
