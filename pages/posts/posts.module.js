@@ -73,7 +73,7 @@ async function getCertainPost1(postId) {
 }
 
 // פוסט מסויים
-async function getCertainPost(postId) {
+async function getCertainPost2(postId) {
     const query = `SELECT posts.id, posts.userId, posts.topic,posts.subtopic, posts.title, posts.body, posts.created_at,
     posts.num_raters,
     posts.score / posts.num_raters as "rating"
@@ -86,6 +86,37 @@ async function getCertainPost(postId) {
     // console.log(post);
     return post;
 }
+
+  
+async function getCertainPost(postId) {
+    const query = `
+    SELECT 
+        posts.id, 
+        posts.userId, 
+        posts.topic,
+        posts.subtopic, 
+        posts.title, 
+        posts.body, 
+        posts.created_at, 
+        posts.score / posts.num_raters as "rating", 
+        GROUP_CONCAT(tags.name) AS tags,
+        users.username AS author
+    FROM 
+        posts
+    LEFT JOIN 
+        tags ON posts.id = tags.postId 
+    LEFT JOIN 
+        users ON posts.userId = users.id 
+    WHERE 
+        posts.id = ?
+    GROUP BY 
+        posts.id;
+    `;
+    const [post] = await pool.query(query, [postId]);
+    // console.log(post);
+    return post;
+}
+
 
 
 
