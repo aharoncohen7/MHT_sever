@@ -76,9 +76,9 @@ albumsRoute.get("/searchAlbums/:userId/:str",IAM.validationParams, async (req, r
 });
 
 // Search by ID
-albumsRoute.get("/searcById/:userId/str",IAM.validationParams, async (req, res) => {
+albumsRoute.get("/searchById/:userId/str",IAM.validationParams, async (req, res) => {
     try {
-        const albums = await db.searcById(req.params.userId, req.params.str);;
+        const albums = await db.searchById(req.params.userId, req.params.str);;
         if (albums) {
             res.json(albums);
             return;

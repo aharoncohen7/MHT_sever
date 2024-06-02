@@ -30,7 +30,7 @@ GROUP BY
 
 
 // לפי נושא
-async function searcByTopic(topic) {
+async function searchByTopic(topic) {
     const query = `SELECT posts.id, posts.userId, posts.topic,posts.subtopic, posts.title, posts.body, posts.created_at, posts.score / posts.num_raters as "rating",
     GROUP_CONCAT(tags.name) AS tags
     FROM posts
@@ -61,7 +61,7 @@ async function getPostsOrderId() {
 }
 
 // פוסט מסויים
-async function getCertainPost1(postId) {
+async function getCertainPost(postId) {
     const query = `SELECT posts.id, posts.userId, posts.topic,posts.subtopic, posts.title, posts.body, posts.created_at,
     posts.num_raters,
     posts.score / posts.num_raters as "rating" 
@@ -88,7 +88,7 @@ async function getCertainPost2(postId) {
 }
 
   
-async function getCertainPost(postId) {
+async function getCertainPost3(postId) {
     const query = `
     SELECT 
         posts.id, 
@@ -126,16 +126,16 @@ async function getCertainPost(postId) {
 async function searchPostByTitle(title) {
     const query = `SELECT id, userId, title, body, created_at, posts.score / posts.num_raters as "rating" FROM posts
     WHERE title LIKE '${title}%';`;
-    const [respons] = await pool.query(query);
-    return respons;
+    const [response] = await pool.query(query);
+    return response;
 }
 
 // לפי מזהה
-async function searcById(id) {
+async function searchById(id) {
     const query = `SELECT id, userId, title, body, created_at, posts.score / posts.num_raters as "rating" FROM posts
     WHERE id LIKE '${id}%';`;
-    const [respons] = await pool.query(query);
-    return respons;
+    const [response] = await pool.query(query);
+    return response;
 }
 
 
@@ -145,8 +145,8 @@ async function editPost(postId, selectedBook, selectedPortion, title, body) {
     console.log("editPost in server", title);
     const query = `update posts set topic = ?,  subtopic = ?, title = ?, body = ?
     where id = ?`;
-    const [respons] = await pool.query(query, [selectedBook, selectedPortion, title, body, postId]);
-    // console.log(respons);
+    const [response] = await pool.query(query, [selectedBook, selectedPortion, title, body, postId]);
+    // console.log(response);
     const updatedPost = await getCertainPost(postId)
     return updatedPost;
 }
@@ -195,15 +195,15 @@ async function updateRatingPost(postId, userId, newRating) {
 async function deletePost(postId) {
     const deletedPost = await getCertainPost(postId)
     const query = `delete from posts where id = ?`;
-    const [respons] = await pool.query(query, [postId]);
+    const [response] = await pool.query(query, [postId]);
     return deletedPost;
 }
 
 
 async function deleteMultiplePosts(idsToDelete) {
     const query = `DELETE FROM posts WHERE id IN (?)`;
-    const [respons] = await pool.query(query, [idsToDelete]);
-    console.log(respons);
+    const [response] = await pool.query(query, [idsToDelete]);
+    console.log(response);
     return true;
 }
 
@@ -215,9 +215,9 @@ async function addPost(userId, title, body, topic, subtopic) {
     console.log(userId, title, body, topic, subtopic);
     const query = `insert into posts (userId, title, body, topic, subtopic) 
     values (?, ?, ?, ?, ?)`;
-    const [respons] = await pool.query(query, [userId, title, body, topic, subtopic]);
-    console.log(respons.insertId);
-    const newPost = await getCertainPost(respons.insertId)
+    const [response] = await pool.query(query, [userId, title, body, topic, subtopic]);
+    console.log(response.insertId);
+    const newPost = await getCertainPost(response.insertId)
     return newPost;
 }
 
@@ -233,12 +233,12 @@ async function test() {
 
 module.exports = {
     getAllPosts,
-    searcByTopic,
+    searchByTopic,
     getPostsOrderId,
     getPostsOrderTitle,
     getCertainPost,
     searchPostByTitle,
-    searcById,
+    searchById,
     addPost,
     editPost,
     updateRatingPost,

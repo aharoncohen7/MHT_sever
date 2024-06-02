@@ -58,10 +58,10 @@ todosRoute.get("/searchTodos/:userId/:str",IAM.validationParams,  async (req, re
 });
 
 // Search by ID
-todosRoute.get("/searcById/:userId/:str",IAM.validationParams,  async (req, res) => {
+todosRoute.get("/searchById/:userId/:str",IAM.validationParams,  async (req, res) => {
     try {
         if (parseInt(req.user.id) === parseInt(req.params.userId)) {
-            const todos = await db.searcById(req.params.userId, req.params.str);
+            const todos = await db.searchById(req.params.userId, req.params.str);
             if (todos.length) {
                 res.status(200).json(todos);
                 return;
@@ -78,10 +78,10 @@ todosRoute.get("/searcById/:userId/:str",IAM.validationParams,  async (req, res)
 
 
 // Search by performance
-todosRoute.get("/searcByCompleted/:userId/:state",IAM.validationState,  async (req, res) => {
+todosRoute.get("/searchByCompleted/:userId/:state",IAM.validationState,  async (req, res) => {
     try {
         if (parseInt(req.user.id) === parseInt(req.params.userId)) {
-            const todos = await db.searcByCompleted(req.params.userId, req.params.state);
+            const todos = await db.searchByCompleted(req.params.userId, req.params.state);
             if (todos.length) {
                 res.status(200).json(todos);
                 return;

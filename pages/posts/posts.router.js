@@ -34,9 +34,9 @@ postsRoute.get("/:postId/", IAM.validationParams, async (req, res) => {
 });
 
 // Search by TOPIC
-postsRoute.get("/searcByTopic/:topic", IAM.validationParamsStr, async (req, res) => {
+postsRoute.get("/searchByTopic/:topic", IAM.validationParamsStr, async (req, res) => {
     try {
-        const posts = await db.searcByTopic(req.params.topic);
+        const posts = await db.searchByTopic(req.params.topic);
         if (posts) {
             res.status(200).json(posts);
             return;
@@ -62,9 +62,9 @@ postsRoute.get("/searchPosts/:title", IAM.validationParamsStr, async (req, res) 
 });
 
 // Search by ID
-postsRoute.get("/searcById/:postId", IAM.validationParams, async (req, res) => {
+postsRoute.get("/searchById/:postId", IAM.validationParams, async (req, res) => {
     try {
-        const posts = await db.searcById(req.params.postId);
+        const posts = await db.searchById(req.params.postId);
         if (posts) {
             res.status(200).json(posts);
             return;
