@@ -61,18 +61,35 @@ async function getPostsOrderId() {
 }
 
 // פוסט מסויים
-async function getCertainPost(postId) {
+async function getCertainPost1(postId) {
     const query = `SELECT posts.id, posts.userId, posts.topic,posts.subtopic, posts.title, posts.body, posts.created_at,
     posts.num_raters,
-    posts.score / posts.num_raters as "rating",
-    users.username AS author 
+    posts.score / posts.num_raters as "rating" 
     FROM posts
-    LEFT JOIN users ON posts.userId = users.id 
     where id = ?`;
     const [[post]] = await pool.query(query, [postId]);
     // console.log(post);
     return post;
 }
+
+// פוסט מסויים
+async function getCertainPost(postId) {
+    const query = `SELECT posts.id, posts.userId, posts.topic,posts.subtopic, posts.title, posts.body, posts.created_at,
+    posts.num_raters,
+    posts.score / posts.num_raters as "rating"
+    ,users.username AS author 
+    FROM posts
+    where id = ?
+    LEFT JOIN users ON posts.userId = users.id`; 
+    
+    const [[post]] = await pool.query(query, [postId]);
+    // console.log(post);
+    return post;
+}
+
+
+
+
 
 // לפי כותרת
 async function searchPostByTitle(title) {
@@ -175,11 +192,11 @@ async function addPost(userId, title, body, topic, subtopic) {
 
 
 async function test() {
-    const data = await getCertainPost(340);
+    const data = await deleteMultiplePosts([89, 84, 5]);
     // const all = await addPost(4, "פרשת בראשית", "dsfgdsfgdfgdfgdf", "בראשית", "וירא");
     console.log(data);
 }
-test()
+// test()
 
 
 
