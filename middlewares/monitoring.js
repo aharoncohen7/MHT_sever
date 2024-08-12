@@ -2,6 +2,20 @@ const Joi = require("joi");
 const pool = require('../DL/db');
 const { log } = require("console");
 
+
+//Get all users
+async function getUsers() {
+    // console.log("in getUsers() ");
+    const SQL = `select * from defaultdb.users`;
+    const [users] = await pool.query(SQL); 
+    // console.log(user);
+    return users;
+}
+
+
+
+
+
 //Get specific user
 async function getUser(id) {
     // console.log("in getUser() ");
@@ -225,6 +239,7 @@ function handleNewComment(req, res, next) {
   
 
 module.exports = {
+    getUsers,
     getUser,
     handleNewUser,
     validationParams,

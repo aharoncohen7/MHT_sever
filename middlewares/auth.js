@@ -11,6 +11,7 @@ async function generate(user) {
 
 // User authoreztion
 async function validate(req, res, next) {
+    console.log("object validation")
     try {
         console.log(req.body);
         let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || "null", SECRET)
