@@ -1,6 +1,6 @@
 const express = require("express");
 const registrationRoute = express.Router();
-const db = require("../login/login.module");
+const usersModule = require("../users/users.module");
 const IAM = require('../../middlewares/monitoring');
 const { log } = require("console");
 
@@ -12,13 +12,13 @@ registrationRoute.post("/", IAM.handleNewUser, async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
-        const isExists = await db.isUserExists(email);
+        const isExists = await usersModule.isUserExists(email);
         console.log(!!isExists);
         if (isExists) {
             res.status(400).send("כבר קיים משתמש עם אימייל זה");
             return;
         }                                   
-        const newUser = await db.createUser(name, phone, email, username, password);
+        const newUser = await usersModule.createUser(name, phone, email, username, password);
         if (newUser) {
             res.json(newUser);
             return;

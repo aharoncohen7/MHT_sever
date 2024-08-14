@@ -1,5 +1,4 @@
 const cors = require("cors");
-// const { authenticate } = require('./middlewares/monitoring');
 const { validate } = require('./middlewares/auth');
 const express = require("express");
 require("dotenv").config();
@@ -23,7 +22,7 @@ app.use(express.json());
 app.use("/api/login", loginRoute);
 app.use("/api/registration", registrationRoute);
 app.use("/api/users",
-  //  validate,
+   validate,
     usersRoute);
 app.use("/api/posts",
 //  validate,
@@ -35,7 +34,6 @@ app.use("/api/comments",validate, commentsRoute);
 
 const port = process.env.PORT || 4002;
 
-// console.log(process.env.PORT);
 
 app.listen(port, () => {
     console.log("server is running on port " + port);

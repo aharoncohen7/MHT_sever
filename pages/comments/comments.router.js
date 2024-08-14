@@ -1,6 +1,5 @@
 const express = require("express");
 const db = require("../comments/comments.module");
-const {gerUser} = require("../login/login.module")
 const IAM = require('../../middlewares/monitoring');
 const commentsRoute = express.Router();
 

@@ -4,7 +4,7 @@ const { addTagsToPost } = require("../tags/tags.module");
 const IAM = require('../../middlewares/monitoring');
 // const postController = require('../DL/post.controller')
 
-
+//הכנה ל4 שכבות
 
 async function getAllPosts (){
     try {

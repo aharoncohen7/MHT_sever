@@ -1,6 +1,23 @@
 const pool = require('../../DL/db');
 
-// בדיקת יוזר
+
+// CREATE
+async function createUser(name, phone, email, username, password) {
+    console.log(password);
+    console.log("createUser() ");
+    const SQL = `insert into users (name, phone, email, username) 
+    values (?, ?, ?, ?)`;
+    const [respons] = await pool.query(SQL, [name, phone, email, username]);
+    const SQL2 = `insert into passwords (userId, password) 
+    values (?, ?)`;
+    const [respons2] = await pool.query(SQL2, [respons.insertId, password]);
+    const newUser = await getUser(respons.insertId)
+    console.log(newUser, "newUser");
+    return newUser;
+}
+
+
+ // Comparing username to password
 async function checkUser(username, password) {
     console.log("in checkUser", username, password);
     const SQL = `SELECT users.id, users.username, passwords.password
@@ -32,36 +49,70 @@ async function isUserExists(email) {
     }
 }
 
-// הוספה
-async function createUser(name, phone, email, username, password) {
-    console.log(password);
-    console.log("createUser() ");
-    const SQL = `insert into users (name, phone, email, username) 
-    values (?, ?, ?, ?)`;
-    const [respons] = await pool.query(SQL, [name, phone, email, username]);
-    const SQL2 = `insert into passwords (userId, password) 
-    values (?, ?)`;
-    const [respons2] = await pool.query(SQL2, [respons.insertId, password]);
-    const newUser = await getUser(respons.insertId)
-    console.log(newUser, "newUser");
-    return newUser;
+
+
+//Get all users
+async function getUsers() {
+    // console.log("in getUsers() ");
+    const SQL = `select * from defaultdb.users`;
+    const [users] = await pool.query(SQL);
+    // console.log(user);
+    return users;
 }
 
-// get user
+//Get specific user
 async function getUser(id) {
-    console.log("getUser() ");
-    const SQL = `SELECT users.id, name, username, email, phone
-   FROM users
-    where users.id = ?`
+    console.log("in getUser() ");
+    const SQL = `select * from defaultdb.users where defaultdb.users.id = ?`;
     const [[user]] = await pool.query(SQL, [id]);
     if (user === undefined) {
         return 0;
     }
-    else {
-        console.log(user);
-        return user;
+    return user;
+}
+
+
+
+//Update user
+async function updateUser(body, id) {
+    const allowedFields = ['name', 'username', 'phone', 'email'];
+    const updates = [];
+    const values = [];
+    for (const [key, value] of Object.entries(body)) {
+        if (allowedFields.includes(key)) {
+            updates.push(`${key} = ?`);
+            values.push(value);
+        }
+    }
+    if (updates.length === 0) {
+        throw new Error('No valid fields provided for update');
+    }
+    const query = `UPDATE defaultdb.users SET ${updates.join(', ')} WHERE id = ?`;
+    values.push(id);
+    try {
+        const [response] = await pool.query(query, values);
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error;
     }
 }
+
+
+//Update user
+async function setAdmin(permission, id) {
+    const query = `UPDATE defaultdb.users SET isAdmin = ? WHERE id = ?`;
+    try {
+        const [response] = await pool.query(query, [permission, id]);
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error('Error updating permission:', error);
+        throw error;
+    }
+}
+
 
 
 async function test() {
@@ -71,6 +122,10 @@ async function test() {
 // test()
 
 module.exports = {
+    getUser,
+    getUsers,
+    updateUser,
+    setAdmin,
     isUserExists,
     checkUser,
     createUser

@@ -1,6 +1,19 @@
-const { log } = require('console');
 const pool = require('../../DL/db');
 
+
+//CREATE
+// הוספה
+async function addPost(userId, title, body, topic, subtopic) {
+    console.log(userId, title, body, topic, subtopic);
+    const query = `insert into posts (userId, title, body, topic, subtopic) 
+    values (?, ?, ?, ?, ?)`;
+    const [response] = await pool.query(query, [userId, title, body, topic, subtopic]);
+    console.log(response.insertId);
+    const newPost = await getCertainPost(response.insertId)
+    return newPost;
+}
+
+//READE 
 // כל הפוסטים
 async function getAllPosts() {
     const query = `SELECT 
@@ -27,7 +40,6 @@ GROUP BY
     // console.log(posts);
     return posts;
 }
-
 
 // לפי נושא
 async function searchByTopic(topic) {
@@ -118,10 +130,6 @@ async function getCertainPost3(postId) {
 }
 
 
-
-
-
-
 // לפי כותרת
 async function searchPostByTitle(title) {
     const query = `SELECT id, userId, title, body, created_at, posts.score / posts.num_raters as "rating" FROM posts
@@ -138,8 +146,7 @@ async function searchById(id) {
     return response;
 }
 
-
-
+//UPDATE
 // עריכה
 async function editPost(postId, selectedBook, selectedPortion, title, body) {
     console.log("editPost in server", title);
@@ -191,6 +198,7 @@ async function updateRatingPost(postId, userId, newRating) {
     else return false;
 }
 
+//DELETE
 // מחיקה
 async function deletePost(postId) {
     const deletedPost = await getCertainPost(postId)
@@ -199,26 +207,11 @@ async function deletePost(postId) {
     return deletedPost;
 }
 
-
 async function deleteMultiplePosts(idsToDelete) {
     const query = `DELETE FROM posts WHERE id IN (?)`;
     const [response] = await pool.query(query, [idsToDelete]);
     console.log(response);
     return true;
-}
-
-
-
-
-// הוספה
-async function addPost(userId, title, body, topic, subtopic) {
-    console.log(userId, title, body, topic, subtopic);
-    const query = `insert into posts (userId, title, body, topic, subtopic) 
-    values (?, ?, ?, ?, ?)`;
-    const [response] = await pool.query(query, [userId, title, body, topic, subtopic]);
-    console.log(response.insertId);
-    const newPost = await getCertainPost(response.insertId)
-    return newPost;
 }
 
 

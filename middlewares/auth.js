@@ -11,25 +11,26 @@ async function generate(user) {
 
 // User authoreztion
 async function validate(req, res, next) {
-    console.log("object validation")
+    console.log("user validation")
+    if(!isValidToken(req.headers.authorization?.split('Bearer ')[1] || "null")){
+        console.log(401);
+        return res.status(401).json({ error: 'No token provided/Invalid token' }); 
+    }
     try {
         console.log(req.body);
         let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || "null", SECRET)
         req.body.userIdFromToken = userFromToken.id;
         req.body.isAdmin = userFromToken.isAdmin;
         console.log(req.body);
-        // console.log(userFromToken.id,userFromToken.isAdmin, "ttt" );
-        // const user = await getUser(userFromToken.id)
-        // req.body.user = user;
-        
         next();
     } catch (err) {
         console.error(err);
-        console.log(401);
-        res.status(401).json({ error: 'Token expired' }); // שליחת תגובת שגיאה עם מידע נוסף
+        res.status(401).json({ error: 'Token expired'  + err.name});
     }
 }
 
+
+// כנראה לא פעיל
 function isTokenExpired(token) {
     try {
         jwt.verify(token.split('Bearer ')[1] || "null", SECRET);
@@ -45,6 +46,17 @@ function isTokenExpired(token) {
 }
 
 
+// check validity of the token
+function isValidToken(token) {
+    console.log(token)
+    if (!token) {
+        return false;
+    }
+    const parts = token.split('.');
+    return parts.length === 3 && parts.every(part => part.length > 0);
+}
+
+
 async function test() {
     const data = await generate({})
     console.log(data);
@@ -56,6 +68,7 @@ module.exports = {
     generate,
     validate,
     isTokenExpired
+    
 }
 
 

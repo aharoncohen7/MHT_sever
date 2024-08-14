@@ -1,80 +1,11 @@
 const express = require("express");
-const db = require("../posts/posts.module");
-const { addTagsToPost } = require("../tags/tags.module");
-const IAM = require('../../middlewares/monitoring');
 const postsRoute = express.Router();
+const postsModule = require("../posts/posts.module");
+const IAM = require('../../middlewares/monitoring');
+const { addTagsToPost } = require("../tags/tags.module");
 const { validate } = require('../../middlewares/auth');
 
-// Get all posts
-postsRoute.get("/", async (req, res) => {
-    try {
-        const posts = await db.getAllPosts();
-        if (posts) {
-            res.status(200).json(posts);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
-// Get a particular post
-postsRoute.get("/:postId/", IAM.validationParams, async (req, res) => {
-    try {
-        const post = await db.getCertainPost(req.params.postId);
-        if (post) {
-            res.status(200).json(post);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
-// Search by TOPIC
-postsRoute.get("/searchByTopic/:topic", IAM.validationParamsStr, async (req, res) => {
-    try {
-        const posts = await db.searchByTopic(req.params.topic);
-        if (posts) {
-            res.status(200).json(posts);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
-// Search by title
-postsRoute.get("/searchPosts/:title", IAM.validationParamsStr, async (req, res) => {
-    try {
-        const posts = await db.searchPostByTitle( req.params.title);
-        if (posts) {
-            res.status(200).json(posts);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
-// Search by ID
-postsRoute.get("/searchById/:postId", IAM.validationParams, async (req, res) => {
-    try {
-        const posts = await db.searchById(req.params.postId);
-        if (posts) {
-            res.status(200).json(posts);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
-
+//CREATE POSTS
 // Add new post
 postsRoute.post("/",validate, IAM.handleNewPost, async (req, res) => { 
    
@@ -89,7 +20,7 @@ postsRoute.post("/",validate, IAM.handleNewPost, async (req, res) => {
         //     res.status(400).send("משתמש לא מורשה");
         //     return;
         // }
-        const newPost = await db.addPost(req.body.userId, req.body.title, req.body.body, req.body.selectedBook, req.body.selectedPortion);
+        const newPost = await postsModule.addPost(req.body.userId, req.body.title, req.body.body, req.body.selectedBook, req.body.selectedPortion);
         console.log(newPost);
         if (newPost) {
             if (req.body.tags) {
@@ -116,12 +47,83 @@ postsRoute.post("/",validate, IAM.handleNewPost, async (req, res) => {
     }
 });
 
-// Editing post
+//READ POSTS
+// Get all posts
+postsRoute.get("/", async (req, res) => {
+    try {
+        const posts = await postsModule.getAllPosts();
+        if (posts) {
+            res.status(200).json(posts);
+            return;
+        }
+        res.status(404).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Get a particular post
+postsRoute.get("/:postId/", IAM.validationParams, async (req, res) => {
+    try {
+        const post = await postsModule.getCertainPost(req.params.postId);
+        if (post) {
+            res.status(200).json(post);
+            return;
+        }
+        res.status(404).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Search by TOPIC
+postsRoute.get("/searchByTopic/:topic", IAM.validationParamsStr, async (req, res) => {
+    try {
+        const posts = await postsModule.searchByTopic(req.params.topic);
+        if (posts) {
+            res.status(200).json(posts);
+            return;
+        }
+        res.status(404).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Search by title
+postsRoute.get("/searchPosts/:title", IAM.validationParamsStr, async (req, res) => {
+    try {
+        const posts = await postsModule.searchPostByTitle( req.params.title);
+        if (posts) {
+            res.status(200).json(posts);
+            return;
+        }
+        res.status(404).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Search by ID
+postsRoute.get("/searchById/:postId", IAM.validationParams, async (req, res) => {
+    try {
+        const posts = await postsModule.searchById(req.params.postId);
+        if (posts) {
+            res.status(200).json(posts);
+            return;
+        }
+        res.status(404).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// UPDATE POSTS
 postsRoute.patch("/:postId",validate, IAM.validationParams, IAM.handleEditPost, async (req, res) => {
     console.log("edit");
     try {
         // לבדוק אם זה הכרחי
-        // const oldPost = await db.getCertainPost(req.params.postId);
+        // const oldPost = await postsModule.getCertainPost(req.params.postId);
         // if (!oldPost) {
         //     res.status(404).send();
         //     return;
@@ -136,7 +138,7 @@ postsRoute.patch("/:postId",validate, IAM.validationParams, IAM.handleEditPost, 
             return;
         }
 
-        const editedPost = await db.editPost(req.params.postId, req.body.selectedBook,req.body.selectedPortion, req.body.title, req.body.body);
+        const editedPost = await postsModule.editPost(req.params.postId, req.body.selectedBook,req.body.selectedPortion, req.body.title, req.body.body);
         console.log("");
         if (editedPost) {
             if (req.body.tags) {
@@ -164,15 +166,15 @@ postsRoute.patch("/:postId",validate, IAM.validationParams, IAM.handleEditPost, 
 
 //  rating a post
 postsRoute.patch("/rating/:postId",validate, IAM.validationParams, IAM.handleRatingUpdating, async (req, res) => {
-    console.log("ttttttttttttttttttt");
+
     try {
-        const oldPost = await db.getCertainPost(req.params.postId);
+        const oldPost = await postsModule.getCertainPost(req.params.postId);
         if (!oldPost) {
             res.status(404).send();
             return;
         }
         
-        const editedPost = await db.updateRatingPost(req.params.postId, req.body.userIdFromToken, req.body.newRating);
+        const editedPost = await postsModule.updateRatingPost(req.params.postId, req.body.userIdFromToken, req.body.newRating);
         if (editedPost) {
             res.status(200).json(editedPost);
             return;
@@ -185,34 +187,32 @@ postsRoute.patch("/rating/:postId",validate, IAM.validationParams, IAM.handleRat
 }
 );
 
-// Deleting post
+//DELETE POSTS
+//Delete single post
 postsRoute.delete("/delete-single/:postId", validate, IAM.validationParams, async (req, res) => {
-    console.log(req.body,req.params);
     try {
-        const post = await db.getCertainPost(parseInt(req.params.postId));
+        const post = await postsModule.getCertainPost(parseInt(req.params.postId));
         if (!post) {
             res.status(404).send();
             return;
         }
-     
+        //כבר יש מידלוואר IAM.checkPermission
+        
         // if (req.body.userIdFromToken !== post.userId) {
         //     res.status(400).send("You are not allowed to delete this post");
         //     return;
         // }
-        if (req.body.isAdmin==0) {
+        // if (req.body.isAdmin==0) {
            
-            res.status(400).send("משתמש לא מורשה");
-            return;
-        }
-        
-        const deletedPost = await db.deletePost(parseInt(req.params.postId));
-        
+        //     res.status(400).send("משתמש לא מורשה");
+        //     return;
+        // }
+        const deletedPost = await postsModule.deletePost(parseInt(req.params.postId));
         if (deletedPost) {
             console.log("the post was deleted");
             res.status(200).json(deletedPost);
             return;
         }
-        
         res.status(404).send();
         return;
     } catch (error) {
@@ -222,23 +222,21 @@ postsRoute.delete("/delete-single/:postId", validate, IAM.validationParams, asyn
 });
 
 
-
-// Deleting array of posts
-postsRoute.delete("/delete-multiple",validate, IAM.validationArray, async (req, res) => {
+// Delete array of posts
+postsRoute.delete("/delete-multiple",validate, IAM.validationArray, IAM.checkPermission, async (req, res) => {
     console.log(req.body,req.params);
-    
     try {
-        if (req.body.isAdmin==0) {  
-            res.status(400).send("משתמש לא מורשה");
-            return;
-        }
-        const isSuccessfulDeletion = await db.deleteMultiplePosts(req.body.postList);
+        //כבר יש מידלוואר IAM.checkPermission
+        // if (req.body.isAdmin==0) {  
+        //     res.status(400).send("משתמש לא מורשה");
+        //     return;
+        // }
+        const isSuccessfulDeletion = await postsModule.deleteMultiplePosts(req.body.postList);
         if (isSuccessfulDeletion) {
             console.log("the postlist has been deleted");
             res.sendStatus(200);
             return;
         }
-        
         res.status(404).send();
         return;
     } catch (error) {
@@ -273,7 +271,8 @@ module.exports = postsRoute;
 
 
 
-// // אימות
+//לא שמיש
+ // אימות
 // async function authenticate(req, res, next) {
 //     try {
 //         const auth = req.headers.auth;

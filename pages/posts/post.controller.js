@@ -1,5 +1,7 @@
 const db = require('../../DL/db');
 
+//הכנה לתבנית גנרית בשיטת 4 השכבות
+
 const table = "posts";
 
 async function create(){
