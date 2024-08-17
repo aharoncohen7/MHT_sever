@@ -5,11 +5,12 @@ require("dotenv").config();
 const app = express();
 
 const loginRoute = require("./pages/login/login.router");
-const registrationRoute = require("./pages/registeration/registeration.router");
+const registrationRoute = require("./pages/registration/registration.router");
 const usersRoute = require("./pages/users/users.router");
 const postsRoute = require("./pages/posts/posts.router");
 const commentsRoute = require("./pages/comments/comments.router");
 const tagsRoute = require("./pages/tags/tags.router");
+const questionRoute = require("./pages/questions/question.router");
 
 
 // app.get('/', (req, res) => {
@@ -21,15 +22,10 @@ app.use(express.json());
 // app.use(express.static('../clientPro7/my-app/build'))
 app.use("/api/login", loginRoute);
 app.use("/api/registration", registrationRoute);
-app.use("/api/users",
-   validate,
-    usersRoute);
-app.use("/api/posts",
-//  validate,
-  postsRoute);
-app.use("/api/tags",
-//  validate,
-  tagsRoute);
+app.use("/api/users",validate, usersRoute);
+app.use("/api/posts",postsRoute);
+app.use("/api/tags",tagsRoute);
+app.use("/api/questions", questionRoute);
 app.use("/api/comments",validate, commentsRoute);
 
 const port = process.env.PORT || 4002;

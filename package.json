@@ -9,6 +9,8 @@
     "joi": "^17.12.0",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
+    "mongoos": "^0.0.1-security",
+    "mongoose": "^8.5.3",
     "mysql2": "^3.9.1",
     "node": "^21.2.0",
     "nodemon": "^3.0.3",
