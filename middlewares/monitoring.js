@@ -2,8 +2,17 @@ const Joi = require("joi");
 const pool = require('../DL/db');
 const usersModule = require("../pages/users/users.module");
 
-//CHECK edit permission
+//CHECK user/admin permission
 function checkPermission(req, res, next) {
+    const schema = Joi.object({
+        userIdFromToken: Joi.number().min(0),
+        isAdmin: Joi.number().min(0).max(3).required(),
+    })
+    const { error } = schema.validate(req.body);
+    if (error) {
+        console.log(error.details[0].message)
+        res.status(403).json({ error: error.details[0].message});
+    }
     if (((req.body.isAdmin > 0) || (req.params.userId == req.body.userIdFromToken))) {
         next();
     }
@@ -83,10 +92,16 @@ function handleNewUser(req, res, next) {
         phone: Joi.string().min(10).max(10).required(),
         email: Joi.string().email().required(),
         password: Joi.string()
-            .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])'))
-            // .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?!.*[\u0590-\u05FF])'))
+            // .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])'))
+            .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?!.*[\u0590-\u05FF])'))
             .min(4).max(8)
-            .required(),
+             .required()
+             .messages({
+                "string.pattern.base": "הסיסמה צריכה להכיל אותיות באנגלית, מספרים ואסור להכיל תווים בעברית.",
+                "string.min": "הסיסמה צריכה להיות באורך מינימלי של 6 תווים.",
+                "string.max": "הסיסמה צריכה להיות באורך מקסימלי של 10 תווים."
+            })
+             ,
     })
     const { error } = schema.validate(req.body);
     if (error) {
@@ -98,30 +113,36 @@ function handleNewUser(req, res, next) {
     next();
 }
 
-// new user validation
+// Update user validation
 function handleUpdateUser(req, res, next) {
-    console.log("handle update user")
+    console.log("handle update user");
     const schema = Joi.object({
         name: Joi.string().max(20),
         username: Joi.string().max(20),
         phone: Joi.string().min(10).max(10),
         email: Joi.string().email(),
         password: Joi.string()
-            .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])'))
-            // .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?!.*[\u0590-\u05FF])'))
-            .min(4).max(8),
+            .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?!.*[\u0590-\u05FF])'))
+            .min(6).max(10)
+            .messages({
+                "string.pattern.base": "הסיסמה צריכה להכיל אותיות באנגלית, מספרים ואסור להכיל תווים בעברית.",
+                "string.min": "הסיסמה צריכה להיות באורך מינימלי של 6 תווים.",
+                "string.max": "הסיסמה צריכה להיות באורך מקסימלי של 10 תווים."
+            }),
         userIdFromToken: Joi.number().min(0),
         isAdmin: Joi.number().min(0).max(3),
-    })
+    });
+
     const { error } = schema.validate(req.body);
     if (error) {
-        console.log(error.details[0].message)
+        console.log(error.details[0].message);
         res.status(400).send(error.details[0].message);
         return;
     }
     console.log("next");
     next();
 }
+
 
 // New post validation
 function handleNewPost(req, res, next) {

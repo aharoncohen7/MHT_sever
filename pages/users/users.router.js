@@ -70,9 +70,62 @@ usersRoute.patch("/set-admin/:userId", IAM.validationParams, IAM.checkAdminPermi
     }
 });
 
+// TODO: ליצור ראוט מיוחד לאדמין
+// TODO: לבקש שם מתשמש וסיסמה ישנה, באמצעותם למוצא יוזר מזהה ואז להחליף סיסמה
+usersRoute.patch("/change-password/:userId",
+     IAM.validationParams,IAM.checkPermission, IAM.handleUpdateUser,
+          async (req, res) => {
+    try {
+        const response = await usersModule.changePassword(req.params.userId, req.body.password);
+        if (response.affectedRows) {
+            res.json(response);
+            return;
+        }
+        res.status(404).send("תקלה לא מזוהה בעדכון משתמש");
+    } catch (error) {
+        res.status(500).send();
+    }
+});
 
 
 
+
+// פונקציה זמנית שהשתמשתי בה לאחר שהוספתי הצפנה לסיסמאות והיה צורך לשנות את הסיסמאות במאגר נתונים
+// usersRoute.patch("/temp/:userId", async (req, res) => {
+//     try {
+//         const updatedPass = await usersModule.changePasswordToHash(req.params.userId);
+//         if (updatedPass) {
+//             res.json(updatedPass);
+//             return;
+//         }
+//     // const updatedPass = await usersModule.updateAllPasswords();
+//     //     if (updatedPass) {
+//     //         res.json(updatedPass);
+//     //         return;
+//     //     }
+        
+//         res.status(404).send("תקלה לא מזוהה בעדכון משתמש");
+//     } catch (error) {
+//         res.status(500).send();
+//     }
+// });
+
+
+
+// TODO: לבקש שם מתשמש וסיסמה, באמצעותם למצוא יוזר
+//להחזיר הרשאות
+usersRoute.delete("/:userId", IAM.validationParams, async (req, res) => {
+    try {
+        const deletedUser = await usersModule.deleteUser(req.params.userId);
+        if (deletedUser) {
+            res.json(deletedUser);
+            return;
+        }
+        res.status(404).send("תקלה לא מזוהה בעת מחיקת משתמש");
+    } catch (error) {
+        res.status(500).send();
+    }
+});
 
 
 
