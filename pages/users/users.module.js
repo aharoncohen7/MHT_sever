@@ -21,27 +21,17 @@ async function createUser(name, phone, email, username, password) {
 // Comparing username to password
 async function checkUser(username, password) {
     console.log("in checkUser", username, password);
-    // const SQL = `SELECT users.id, users.username, passwords.password
-    // FROM defaultdb.users
-    // JOIN defaultdb.passwords ON users.id = passwords.userId
-    // where users.username = ? and passwords.password = ?`
-    // שיניתי לאחר הצפנת סיסמה 
     const SQL = `SELECT users.id, users.username, passwords.password
     FROM defaultdb.users
     JOIN defaultdb.passwords ON users.id = passwords.userId
     where users.username = ?`
     // const [[user]] = await pool.query(SQL, [username, password]);
     const [[user]] = await pool.query(SQL, [username]);
-    if (user === undefined) {
-        return 0;
+    if (user && user.password && bcrypt.compareSync(password, user.password)) {
+        console.log(user.id);
+        return user.id;
     }
-    // if (!bcrypt.compareSync(password, user.password)) throw "Not the same password"
-    //להחזיר לאחר החלפת סיסמאות כללית
-    if (!bcrypt.compareSync(password, user.password)) return 0;
-
-    console.log(user.id);
-    return user.id;
-
+    return 0;
 }
 
 // בדיקה אם יוזר כבר קיים
