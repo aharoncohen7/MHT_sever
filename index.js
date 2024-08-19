@@ -23,7 +23,7 @@ app.use(express.json());
 app.use("/api/login", loginRoute);
 app.use("/api/registration", registrationRoute);
 app.use("/api/users"
-    // ,validate
+    ,validate
     
     , usersRoute);
 app.use("/api/posts",postsRoute);

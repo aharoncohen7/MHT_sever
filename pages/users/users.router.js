@@ -5,7 +5,7 @@ const usersRoute = express.Router();
 
 //READE
 //Get all users
-usersRoute.get("/", IAM.checkPermission, async (req, res) => {
+usersRoute.get("/",IAM.checkPermission, async (req, res) => {
     try {
         const users = await usersModule.getUsers();
         if (users) {

@@ -26,14 +26,21 @@ function checkPermission(req, res, next) {
 function checkAdminPermission(req, res, next) {
     console.log(req.body.isAdmin)
     const schema = Joi.object({
-        userIdFromToken: Joi.number().min(0),
+        userIdFromToken: Joi.number().min(0).messages({
+            "string.min": "מספר מזהה לא תקין",
+        }),
         permission: Joi.number().min(0).max(3).required(),
-        isAdmin: Joi.number().min(0).max(3).required(),
+        isAdmin: Joi.number().min(0).max(3).required()
+        .messages({
+            "string.min": "גישה נדחתה - אין הרשאה",
+            "string.max": "הרשאה לא תקינה"
+        }),
     })
     const { error } = schema.validate(req.body);
     if (error) {
         console.log(error.details[0].message)
         res.status(403).json({ error: error.details[0].message});
+        return
     }
     if (req.body.isAdmin > 0) {
         next();

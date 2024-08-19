@@ -11,21 +11,18 @@ async function generate(user) {
 
 // User authoreztion
 async function validate(req, res, next) {
-    console.log("user validation")
-    if(!isValidToken(req.headers.authorization?.split('Bearer ')[1] || "null")){
-        console.log(401);
-        return res.status(401).json({ error: 'No token provided/Invalid token' }); 
-    }
+    // if(!isValidToken(req.headers.authorization?.split('Bearer ')[1] || "null")){
+    //    res.status(401).json({ error: 'No token provided/Invalid token' });
+    // }
     try {
-        console.log(req.body);
-        let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || "null", SECRET)
+        let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || req.headers.authorization?.split('Bearer%')[1] ||  "null", SECRET)
         req.body.userIdFromToken = userFromToken.id;
         req.body.isAdmin = userFromToken.isAdmin;
         console.log(req.body);
         next();
     } catch (err) {
-        console.error(err);
-        res.status(401).json({ error: 'Token expired'  + err.name});
+        console.log({err});
+        res.status(401).json({ error: 'Token expired: '  + err.name});
     }
 }
 
