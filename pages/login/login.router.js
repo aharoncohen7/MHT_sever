@@ -3,6 +3,7 @@ const loginRoute = express.Router();
 const auth = require('../../middlewares/auth');
 const IAM = require('../../middlewares/monitoring');
 const usersModule = require("../users/users.module");
+const { sendVerificationEmail, htmlForVerification } = require("../../verification");
 
 
 // login
@@ -18,12 +19,7 @@ loginRoute.post("/", async (req, res) => {
         const user = await usersModule.getUser(parseFloat(check));
         console.log(user);
         if (user) {
-            const token = await auth.generate({
-                id: user.id,
-                isAdmin: user.isAdmin,
-                username: user.username,
-                password: req.body.password,
-            })
+            const token = await auth.generateToken(user)
             user.token = token;
             res.json(user);
             return;
@@ -62,6 +58,46 @@ loginRoute.post("/isTokenExpired", async (req, res) => {
         res.status(500).send(error);
     }
 });
+
+
+// שליחת אימייל
+loginRoute.post("/verification", async (req, res) => {
+    try {
+        const verificationToken = await auth.generateTokenForNewUser(req.body.email);
+        const message = await sendVerificationEmail(req.body.email, verificationToken);
+        if (message){
+            res.status(200).send(message);
+            return;
+        }
+        res.status(500).json("error: Verification failed")
+        
+       
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+});
+
+
+
+
+loginRoute.get("/verify-email/:token", async (req, res) => {
+    try {
+      let userFromToken = auth.verificationToken(req.params.token)
+      if (!userFromToken) {
+        res.status(404).send("תקלה לא מזוהה באימות כתובת אימייל ");
+        return;
+      }
+       res.send(htmlForVerification());
+   } catch (error) {
+       res.status(500).send();
+   }
+});
+
+
+
+
+
 
 
 module.exports = loginRoute;
@@ -103,7 +139,7 @@ module.exports = loginRoute;
 //         }
 //         const user = await IAM.getUser(parseFloat(check));
 //         if (user) {
-//             const token = await auth.generate({
+//             const token = await auth.generateToken({
 //                 id: user.id,
 //                 username: req.body.username,
 //                 password: req.body.password,

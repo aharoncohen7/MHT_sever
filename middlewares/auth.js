@@ -1,28 +1,70 @@
 const jwt = require('jsonwebtoken');
-const { getUser } = require('./monitoring');
-const { log } = require('console');
+require("dotenv").config();
 const SECRET = process.env.SECRET
 
-async function generate(user) {
-    let token = jwt.sign(user, SECRET, { expiresIn: "200m" });
+async function generateToken(user) {
+    const payload = {
+        id: user.id,
+        isAdmin: user.isAdmin,
+        username: user.username,
+    };
+    let token = jwt.sign(payload, SECRET, { expiresIn: "4h" });
     return `Bearer ${token}`
 }
 
 
+
+async function generateTokenForNewUser(email) {
+    const payload = {
+        email,
+        type: 'new-user'
+    };
+    let token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
+    return token
+}
+
+
+
+function generateResetTokenForUser(user) {
+    const payload = {
+        id: user.id,
+        email: user.email,
+        type: 'password-reset'
+    };
+
+    // יצירת טוקן עם תוקף של שעה
+    const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
+    return token;
+}
+
+
+const verificationToken = (token)=>{
+    try{
+        const user = jwt.verify(token, SECRET)
+        return user;
+    }
+    catch(err){
+        console.log(err.name, "catch verificationToken");
+        return false;
+    }
+    
+}
+
+
+
 // User authoreztion
 async function validate(req, res, next) {
-    // if(!isValidToken(req.headers.authorization?.split('Bearer ')[1] || "null")){
-    //    res.status(401).json({ error: 'No token provided/Invalid token' });
-    // }
     try {
-        let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || req.headers.authorization?.split('Bearer%')[1] ||  "null", SECRET)
+        // const token= await generateToken({id: 37, isAdmin: 1})
+        // let userFromToken = jwt.verify(token.split('Bearer ')[1] , SECRET)
+        let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || req.headers.authorization?.split('Bearer%')[1] || "null", SECRET)
         req.body.userIdFromToken = userFromToken.id;
         req.body.isAdmin = userFromToken.isAdmin;
         console.log(req.body);
         next();
     } catch (err) {
-        console.log({err});
-        res.status(401).json({ error: 'Token expired: '  + err.name});
+        console.log({ err });
+        res.status(401).json({ error: 'Token expired: ' + err.name });
     }
 }
 
@@ -55,17 +97,20 @@ function isValidToken(token) {
 
 
 async function test() {
-    const data = await generate({})
+    const data = await generateToken({})
     console.log(data);
 }
 // test()
 
 
 module.exports = {
-    generate,
+    generateResetTokenForUser,
+    generateTokenForNewUser,
+    generateToken,
+    verificationToken,
     validate,
     isTokenExpired
-    
+
 }
 
 

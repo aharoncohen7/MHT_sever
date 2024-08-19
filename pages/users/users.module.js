@@ -1,7 +1,7 @@
 const pool = require('../../DL/db');
 const bcrypt = require("bcrypt");
 
-
+//todo להגדיר בהתחלה הרשואה מינוס ורק לאחר אימות מייל יעלה ל0
 // Create
 async function createUser(name, phone, email, username, password) {
     console.log(password);

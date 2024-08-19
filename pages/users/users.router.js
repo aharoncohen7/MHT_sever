@@ -113,8 +113,7 @@ usersRoute.patch("/change-password/:userId",
 
 
 // TODO: לבקש שם מתשמש וסיסמה, באמצעותם למצוא יוזר
-//להחזיר הרשאות
-usersRoute.delete("/:userId", IAM.validationParams, async (req, res) => {
+usersRoute.delete("/:userId", IAM.validationParams,IAM.checkPermission, async (req, res) => {
     try {
         const deletedUser = await usersModule.deleteUser(req.params.userId);
         if (deletedUser) {

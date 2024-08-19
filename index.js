@@ -22,10 +22,7 @@ app.use(express.json());
 // app.use(express.static('../clientPro7/my-app/build'))
 app.use("/api/login", loginRoute);
 app.use("/api/registration", registrationRoute);
-app.use("/api/users"
-    ,validate
-    
-    , usersRoute);
+app.use("/api/users",validate, usersRoute);
 app.use("/api/posts",postsRoute);
 app.use("/api/tags",tagsRoute);
 app.use("/api/questions", questionRoute);
