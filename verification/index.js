@@ -3,6 +3,7 @@ require("dotenv").config();
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 const CLIENT_HOST = process.env.CLIENT_HOST;
+const SERVER_HOST = process.env.SERVER_HOST;
 const GMAIL_USERNAME= process.env.GMAIL_USERNAME;
 const GMAIL_PASSWORD =  process.env.GMAIL_PASSWORD;
 
@@ -18,7 +19,7 @@ const transporter = nodemailer.createTransport({
 
 
 async function sendVerificationEmail(userEmail, verificationToken) {
-    const verificationLink = `http://localhost:4002/api/login/verify-email/${verificationToken}`;
+    const verificationLink = `${SERVER_HOST}/api/login/verify-email/${verificationToken}`;
     console.log({
         user: GMAIL_USERNAME,
         pass: GMAIL_PASSWORD
@@ -160,7 +161,7 @@ const htmlForVerification2 = ()=> `<!DOCTYPE html>
         <div class="success-icon">✔</div>
         <h1>אימות הושלם בהצלחה!</h1>
         <p>תודה שאימתת את כתובת הדוא"ל שלך. החשבון שלך פעיל כעת.</p>
-        <a href="${CLIENT_HOST}login" class="button">התחבר לחשבון שלך</a>
+        <a href="${CLIENT_HOST}/login" class="button">התחבר לחשבון שלך</a>
     </div>
 </body>
 </html>`
@@ -258,7 +259,7 @@ const htmlForVerification = ()=> `<!DOCTYPE html>
         </svg>
         <h1>אימות הושלם בהצלחה!</h1>
         <p>תודה שאימתת את כתובת הדוא"ל שלך. החשבון שלך פעיל כעת.</p>
-        <a href="${CLIENT_HOST}login" class="button">התחבר לחשבון שלך</a>
+        <a href="${CLIENT_HOST}/login" class="button">התחבר לחשבון שלך</a>
     </div>
 </body>
 </html>
