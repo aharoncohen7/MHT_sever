@@ -40,11 +40,13 @@ async function sendVerificationEmail(userEmail, VerifiedToken) {
         }
         .container {
             max-width: 600px;
+            text-align: center;
             margin: 20px auto;
             background-color: #ffffff;
             border-radius: 5px;
             padding: 30px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            direction: rtl;
         }
         h1 {
             color: #2c3e50;
@@ -72,8 +74,8 @@ async function sendVerificationEmail(userEmail, VerifiedToken) {
 </head>
 <body>
     <div class="container">
-        <h1>ברוכים הבאים! אנא אמתו את חשבונכם</h1>
-        <p>תודה שנרשמתם לאתר שלנו. כדי להשלים את תהליך ההרשמה, אנא לחצו על הכפתור למטה לאימות כתובת הדוא"ל שלכם:</p>
+        <h1>ברוכים הבאים לאתר וורטלי! אנא אמתו את חשבונכם</h1>
+        <p>תודה שהצטרפתם לאתר שלנו. כדי להשלים את תהליך ההרשמה, אנא לחצו על הכפתור למטה לאימות כתובת הדוא"ל שלכם:</p>
         <a href="${verificationLink}" class="button">אמת את החשבון</a>
         <p>אם לא נרשמתם לאתר שלנו, אנא התעלמו מהודעה זו.</p>
         <div class="footer">
