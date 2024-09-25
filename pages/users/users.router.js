@@ -57,9 +57,9 @@ usersRoute.patch("/:userId", IAM.validationParams, IAM.checkPermission, IAM.hand
 });
 
 
-usersRoute.patch("/set-admin/:userId", IAM.validationParams, IAM.checkAdminPermission,  async (req, res) => {
+usersRoute.patch("/set-permission/:userId", IAM.validationParams, IAM.checkAdminPermission,  async (req, res) => {
     try {
-        const updatedUser = await usersModule.setAdmin(req.body.permission, req.params.userId)
+        const updatedUser = await usersModule.setPermission(req.body.permission, req.params.userId)
         if (updatedUser) {
             res.json(updatedUser);
             return;

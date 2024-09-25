@@ -41,13 +41,22 @@ function generateResetTokenForUser(user) {
 const verificationToken = (token)=>{
     try{
         const user = jwt.verify(token, SECRET)
-        return user;
+        if(user){
+            return { status: 200, user}
+        }
+        else{
+            return { status: 404 }
+        }
     }
     catch(err){
-        console.log(err.name, "catch verificationToken");
-        return false;
-    }
-    
+        if(err.name == "TokenExpiredError"){
+            return { status: 401 }
+        }
+        else{
+            console.log(err.name, "else");
+            throw err;
+        }
+}
 }
 
 
@@ -55,8 +64,6 @@ const verificationToken = (token)=>{
 // User authoreztion
 async function validate(req, res, next) {
     try {
-        // const token= await generateToken({id: 37, isAdmin: 1})
-        // let userFromToken = jwt.verify(token.split('Bearer ')[1] , SECRET)
         let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || req.headers.authorization?.split('Bearer%')[1] || "null", SECRET)
         req.body.userIdFromToken = userFromToken.id;
         req.body.isAdmin = userFromToken.isAdmin;

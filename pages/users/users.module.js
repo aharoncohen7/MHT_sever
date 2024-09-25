@@ -6,9 +6,9 @@ const bcrypt = require("bcrypt");
 async function createUser(name, phone, email, username, password) {
     console.log(password);
     console.log("createUser() ");
-    const SQL = `INSERT into users (name, phone, email, username) 
-    values (?, ?, ?, ?)`;
-    const [response] = await pool.query(SQL, [name, phone, email, username]);
+    const SQL = `INSERT into users (name, phone, email, username, isAdmin) 
+    values (?, ?, ?, ?, ?)`;
+    const [response] = await pool.query(SQL, [name, phone, email, username, -1]);
     const SQL2 = `INSERT into passwords (userId, password) 
     values (?, ?)`;
     const [response2] = await pool.query(SQL2, [response.insertId, password]);
@@ -98,6 +98,24 @@ async function updateUser(body, id) {
 }
 
 
+async function activateUser(id) {
+    try {
+        const response = await setPermission(0, id)
+        if(response.affectedRow > 0){
+            return {status: 200 ,message: "המשתמש אומת והופעל"};
+        }
+        else{
+            return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
+        }
+        
+    } catch (error) {
+        console.error('Error updating user:', error);
+        return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
+    }
+}
+
+
+
 //TODO: להשאיר כך-כאן הפונקציה צריכה רק לקבל נתונים ולעדכן, בשירותים יש לאתר את המזהה לפי סיסמה ישנה ולהצפין
 async function changePassword(id, password) {
     console.log("changePassword() ", {id, password});
@@ -146,11 +164,10 @@ async function updateAllPasswords() {
 }
 
 //set admin
-async function setAdmin(permission, id) {
+async function setPermission(permission, id) {
     const query = `UPDATE defaultdb.users SET isAdmin = ? WHERE id = ?`;
     try {
         const [response] = await pool.query(query, [permission, id]);
-        console.log(response);
         return response;
     } catch (error) {
         console.error('Error updating permission:', error);
@@ -189,11 +206,12 @@ module.exports = {
     changePassword,
     changePasswordToHash,
     updateAllPasswords,
-    setAdmin,
+    setPermission,
     isUserExists,
     checkUser,
     createUser,
-    deleteUser
+    deleteUser,
+    activateUser
 };
 
 

@@ -173,3 +173,99 @@ async function makeDB() {
 
 // makeDB()
 
+// // Drop the database if it exists and create it
+// DROP DATABASE IF EXISTS my_database; 
+// CREATE DATABASE IF NOT EXISTS my_database; 
+
+// // Create the users table
+// CREATE TABLE users (
+//     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+//     name TEXT,
+//     username TEXT,
+//     email TEXT,
+//     phone TEXT
+// );
+
+// // Create the posts table
+// CREATE TABLE posts (
+//     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+//     userId INT,
+//     title TEXT,
+//     body TEXT,
+//     num_raters INT DEFAULT 0,
+//     score DECIMAL(10, 1) DEFAULT 0.0,
+//     rating DECIMAL(2, 1) DEFAULT 0.0,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+// );
+
+// // Create the comments table
+// CREATE TABLE comments (
+//     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+//     postId INT,
+//     name TEXT,
+//     email TEXT,
+//     body TEXT,
+//     FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE
+// );
+
+// // Create the passwords table
+// CREATE TABLE passwords (
+//     userId INT,
+//     password TEXT,
+//     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+// );
+
+// // Create the tags table
+// CREATE TABLE tags (
+//     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+//     postId INT NOT NULL,
+//     name TEXT,
+//     FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE
+// );
+
+
+// לצורך תרשים ERD
+
+// Table users {
+//   id int [primary key, auto_increment]
+//   name text
+//   username text
+//   email text
+//   phone text
+// }
+
+// Table posts {
+//   id int [primary key, auto_increment]
+//   userId int
+//   title text
+//   body text
+//   num_raters int [default: 0]
+//   score decimal(10,1) [default: 0.0]
+//   rating decimal(2,1) [default: 0.0]
+//   created_at timestamp [default: current_timestamp]
+// }
+
+// Table comments {
+//   id int [primary key, auto_increment]
+//   postId int
+//   name text
+//   email text
+//   body text
+// }
+
+// Table passwords {
+//   userId int
+//   password text
+// }
+
+// Table tags {
+//   id int [primary key, auto_increment]
+//   postId int
+//   name text
+// }
+
+// Ref: posts.userId > users.id // many-to-one
+// Ref: comments.postId > posts.id // many-to-one
+// Ref: passwords.userId > users.id // one-to-one
+// Ref: tags.postId > posts.id // many-to-one

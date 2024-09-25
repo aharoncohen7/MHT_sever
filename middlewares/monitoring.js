@@ -29,7 +29,7 @@ function checkAdminPermission(req, res, next) {
         userIdFromToken: Joi.number().min(0).messages({
             "string.min": "מספר מזהה לא תקין",
         }),
-        permission: Joi.number().min(0).max(3).required(),
+        permission: Joi.number().min(-2).max(3).required(),
         isAdmin: Joi.number().min(0).max(3).required()
         .messages({
             "string.min": "גישה נדחתה - אין הרשאה",
