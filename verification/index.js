@@ -167,6 +167,7 @@ const sendVerificationFailureEmail = () => `<!DOCTYPE html>
         <p>לצערנו, לא הצלחנו לאמת את כתובת הדוא"ל שלך.</p>
         <p>ייתכן שהקישור לאימות פג תוקף, או שהייתה בעיה טכנית בתהליך האימות.</p>
         <p>בבקשה נסה/י שוב או פנה/י לתמיכה לקבלת עזרה.</p>
+        <a href="${CLIENT_HOST}/about/contact-us"/>
         <div class="footer">
             <p>בברכה,<br>צוות האתר</p>
         </div>
