@@ -42,7 +42,7 @@ const verificationToken = (token)=>{
     try{
         const user = jwt.verify(token, SECRET)
         if(user){
-            return { status: 200, user}
+            return { status: 200, user: user}
         }
         else{
             return { status: 404 }

@@ -98,21 +98,21 @@ async function updateUser(body, id) {
 }
 
 
-async function activateUser(id) {
-    try {
-        const response = await setPermission(0, id)
-        if(response.affectedRow > 0){
-            return {status: 200 ,message: "המשתמש אומת והופעל"};
-        }
-        else{
-            return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
-        }
+// async function activateUser(id) {
+//     try {
+//         const response = await setPermission(0, id)
+//         if(response.affectedRow > 0){
+//             return {status: 200 ,message: "המשתמש אומת והופעל"};
+//         }
+//         else{
+//             return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
+//         }
         
-    } catch (error) {
-        console.error('Error updating user:', error);
-        return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
-    }
-}
+//     } catch (error) {
+//         console.error('Error updating user:', error);
+//         return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
+//     }
+// }
 
 
 
@@ -172,6 +172,23 @@ async function setPermission(permission, id) {
     } catch (error) {
         console.error('Error updating permission:', error);
         throw error;
+    }
+}
+//activate User
+async function activateUser(email) {
+    const query = `UPDATE defaultdb.users SET isAdmin = 0 WHERE email = ?`;
+    try {
+        const [response] = await pool.query(query, [email]);
+        const {changedRows} = response
+        if(changedRows > 0){
+            return {status: 200 ,message: "המשתמש אומת והופעל"};
+        }
+        else{
+            return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
+        }
+    } catch (error) {
+        console.error('Error activate user:', error);
+        return {status: 404, message: "הפעולה נכשלה, משתמש לא הופעל"};
     }
 }
 

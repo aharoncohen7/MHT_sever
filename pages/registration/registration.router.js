@@ -71,33 +71,50 @@ registrationRoute.post("/verification", async (req, res) => {
 // אימות אימייל
 registrationRoute.get("/verify-email/:userEmail/:token", async (req, res) => {
   try {
+    console.log(1)
+    
     let verification = auth.verificationToken(req.params.token);
+    console.log(2)
     if (verification.status === 404) {
-      res.status(404).send(sendVerificationFailureEmail());
-      return;
+        console.log(3)
+        
+        res.status(404).send(sendVerificationFailureEmail());
+        console.log(4)
+        return;
     }
     if (verification.status == 401) {
-      const VerifiedToken = await auth.generateTokenForNewUser(req.params.userEmail);
-      const message = await sendVerificationEmail(
-        req.body.email,
-        VerifiedToken
-      );
-      if (!message) {
-        res.status(400).send(sendVerificationFailureEmail());
+        console.log(5)
+        const VerifiedToken = await auth.generateTokenForNewUser(req.params.userEmail);
+        console.log(6)
+        const message = await sendVerificationEmail(
+            req.body.email,
+            VerifiedToken
+        );
+        console.log(7)
+        if (!message) {
+          console.log(8)
+          res.status(400).send(sendVerificationFailureEmail());
+          return;
+        }
+        console.log(9)
+        res.status(410).send(sendVerificationTokenExpired());
         return;
-      }
-      res.status(410).send(sendVerificationTokenExpired());
-      return;
     }
     if (verification.status === 200) {
-      const activate = await usersModule.activateUser(verification.user.id);
-      if (activate.status == 404) {
-        res.status().send(sendVerificationFailureEmail());
-        return;
-      }
-      res.status(200).send(sendSuccessfulVerification());
+        console.log(10)
+        console.log(verification.user.email)
+        const activate = await usersModule.activateUser(verification.user.email);
+        console.log(11)
+        if (activate.status == 404) {
+          console.log(12)
+          res.status(404).send(sendVerificationFailureEmail());
+          return;
+        }
+        console.log(13)
+        res.status(200).send(sendSuccessfulVerification());
     }
-  } catch (error) {
+} catch (error) {
+      console.log(14)
     console.error({ error });
     res.status(500).send(sendVerificationFailureEmail());
   }
