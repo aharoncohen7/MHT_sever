@@ -19,7 +19,8 @@ async function generateTokenForNewUser(email) {
         email,
         type: 'new-user'
     };
-    let token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
+    let token = jwt.sign(payload, SECRET, { expiresIn: "15m" });
+    console.log(token)
     return token
 }
 

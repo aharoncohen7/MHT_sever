@@ -1,7 +1,6 @@
 const pool = require('../../DL/db');
 const bcrypt = require("bcrypt");
 
-//todo להגדיר בהתחלה הרשואה מינוס ורק לאחר אימות מייל יעלה ל0
 // Create
 async function createUser(name, phone, email, username, password) {
     console.log(password);
@@ -20,7 +19,7 @@ async function createUser(name, phone, email, username, password) {
 
 // Comparing username to password
 async function checkUser(username, password) {
-    console.log("in checkUser", username, password);
+    console.log("in checkUser❤️❤️❤️❤️", username, password);
     const SQL = `SELECT users.id, users.username, passwords.password
     FROM defaultdb.users
     JOIN defaultdb.passwords ON users.id = passwords.userId
@@ -40,6 +39,22 @@ async function isUserExists(email) {
     FROM users
     where email = ?`
     const [[user]] = await pool.query(SQL, [email]);
+    if (user === undefined) {
+        return 0;
+    }
+    else {
+        console.log(user.id);
+        return 1;
+    }
+}
+
+
+// בדיקה אם שם משתמש תפוס
+async function isUserNameExists(username) {
+    const SQL = `SELECT users.id
+    FROM users
+    where username = ?`
+    const [[user]] = await pool.query(SQL, [username]);
     if (user === undefined) {
         return 0;
     }
@@ -228,7 +243,8 @@ module.exports = {
     checkUser,
     createUser,
     deleteUser,
-    activateUser
+    activateUser,
+    isUserNameExists
 };
 
 
