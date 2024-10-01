@@ -76,47 +76,10 @@ postsRoute.get("/:postId/", IAM.validationParams, async (req, res) => {
     }
 });
 
-// Search by TOPIC
-postsRoute.get("/searchByTopic/:topic", IAM.validationParamsStr, async (req, res) => {
-    try {
-        const posts = await postsModule.searchByTopic(req.params.topic);
-        if (posts) {
-            res.status(200).json(posts);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
 
-// Search by title
-postsRoute.get("/searchPosts/:title", IAM.validationParamsStr, async (req, res) => {
-    try {
-        const posts = await postsModule.searchPostByTitle( req.params.title);
-        if (posts) {
-            res.status(200).json(posts);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
 
-// Search by ID
-postsRoute.get("/searchById/:postId", IAM.validationParams, async (req, res) => {
-    try {
-        const posts = await postsModule.searchById(req.params.postId);
-        if (posts) {
-            res.status(200).json(posts);
-            return;
-        }
-        res.status(404).send();
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
+
+
 
 // UPDATE POSTS
 postsRoute.patch("/:postId",validate, IAM.validationParams, IAM.handleEditPost, async (req, res) => {

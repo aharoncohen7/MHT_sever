@@ -63,7 +63,7 @@ const verificationToken = (token)=>{
 
 
 // User authoreztion
-async function validate(req, res, next) {
+async function validateToken(req, res, next) {
     try {
         let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || req.headers.authorization?.split('Bearer%')[1] || "null", SECRET)
         req.body.userIdFromToken = userFromToken.id;
@@ -116,7 +116,7 @@ module.exports = {
     generateTokenForNewUser,
     generateToken,
     verificationToken,
-    validate,
+    validate: validateToken,
     isTokenExpired
 
 }
