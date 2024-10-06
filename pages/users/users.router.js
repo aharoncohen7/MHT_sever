@@ -9,7 +9,8 @@ usersRoute.get("/",IAM.checkPermission, async (req, res) => {
     try {
         const users = await usersModule.getUsers();
         if (users) {
-            res.json(users);
+        console.log(users)
+            res.status(200).send(users);
             return;
         }
         res.status(404).send("User not found");

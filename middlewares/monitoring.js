@@ -7,11 +7,13 @@ function checkPermission(req, res, next) {
     const schema = Joi.object({
         userIdFromToken: Joi.number().min(0),
         isAdmin: Joi.number().min(0).max(3).required(),
+        username: Joi.string()
     })
     const { error } = schema.validate(req.body);
     if (error) {
         console.log(error.details[0].message)
         res.status(403).json({ error: error.details[0].message});
+        return
     }
     if (((req.body.isAdmin > 0) || (req.params.userId == req.body.userIdFromToken))) {
         next();
