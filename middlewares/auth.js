@@ -68,6 +68,7 @@ async function validateToken(req, res, next) {
         let userFromToken = jwt.verify(req.headers.authorization?.split('Bearer ')[1] || req.headers.authorization?.split('Bearer%')[1] || "null", SECRET)
         req.body.userIdFromToken = userFromToken.id;
         req.body.isAdmin = userFromToken.isAdmin;
+        req.body.username = userFromToken.username;
         console.log(req.body);
         next();
     } catch (err) {
