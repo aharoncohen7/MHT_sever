@@ -140,6 +140,7 @@ function handleUpdateUser(req, res, next) {
             }),
         userIdFromToken: Joi.number().min(0),
         isAdmin: Joi.number().min(0).max(3),
+        username: Joi.string(),
     });
 
     const { error } = schema.validate(req.body);
@@ -165,6 +166,7 @@ function handleNewPost(req, res, next) {
         tags: Joi.array().items(Joi.string().max(20)),
         userIdFromToken: Joi.number().min(1).required(),
         isAdmin: Joi.number().min(0).max(3),
+        username: Joi.string(),
         user: Joi.any(),
     })
     const { error } = schema.validate(req.body);
@@ -206,6 +208,7 @@ function handleRatingUpdating(req, res, next) {
         newRating: Joi.number().min(1).max(5).required(),
         userIdFromToken: Joi.number().min(1).required(),
         isAdmin: Joi.number().min(0).max(3),
+        username: Joi.string(),
         user: Joi.any(),
     });
     const { error } = schema.validate(req.body);
@@ -225,6 +228,7 @@ function handleNewComment(req, res, next) {
         postId: Joi.number().min(1).required(),
         userIdFromToken: Joi.number().min(1).required(),
         isAdmin: Joi.number().min(0).max(3),
+        username: Joi.string(),
         user: Joi.any(),
     })
     const { error } = schema.validate(req.body);
@@ -243,6 +247,7 @@ function handleNewTags(req, res, next) {
         tags: Joi.array().items(Joi.string().max(20).required()).required(),
         userIdFromToken: Joi.number().min(1).required(),
         isAdmin: Joi.number().min(0).max(3),
+        username: Joi.string(),
         user: Joi.any(),
     });
     const { error } = schema.validate(req.body);
