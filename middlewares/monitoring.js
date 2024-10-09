@@ -32,6 +32,7 @@ function checkAdminPermission(req, res, next) {
             "string.min": "מספר מזהה לא תקין",
         }),
         permission: Joi.number().min(-2).max(3).required(),
+        username: Joi.string(),
         isAdmin: Joi.number().min(0).max(3).required()
         .messages({
             "string.min": "גישה נדחתה - אין הרשאה",
