@@ -31,7 +31,6 @@ loginRoute.post("/", async (req, res) => {
 
 // בדיקת טוקן
 loginRoute.post("/checkToken", auth.validate, async (req, res) => {
-    console.log(req.body, "😍😍😍😍😍😍😍")
     const user = {
         userId: req.body.userIdFromToken,
         isAdmin: req.body.isAdmin,

@@ -190,6 +190,7 @@ function handleEditPost(req, res, next) {
         tags: Joi.array().items(Joi.string().max(20)),
         userIdFromToken: Joi.number().min(1).required(),
         isAdmin: Joi.number().min(0).max(3).required(),
+        username: Joi.string(),
         user: Joi.any(),
     })
     const { error } = schema.validate(req.body);
@@ -200,6 +201,7 @@ function handleEditPost(req, res, next) {
     console.log("next");
     next();
 }
+
 
 
 function handleRatingUpdating(req, res, next) {
