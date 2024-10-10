@@ -27,9 +27,13 @@ async function isPostExist(postId) {
 
 //  addition
 async function addComment(postId, name, email, body) {
+    console.log("🎖️")
     const SQL = `insert into comments (postId, name, email, body ) values (?, ?, ?, ?)`;
+    console.log("🎖️🎖️")
     const [respons] = await pool.query(SQL, [postId, name, email, body]);
+    console.log("🎖️🎖️🎖️")
     const newComment = await getCertainComment(respons.insertId)
+    console.log("🎖️🎖️🎖️🎖️")
     return newComment;
 }
 

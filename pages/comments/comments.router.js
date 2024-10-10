@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../comments/comments.module");
+const Users = require("../users/users.module");
 const IAM = require('../../middlewares/monitoring');
 const commentsRoute = express.Router();
 
@@ -40,14 +41,18 @@ commentsRoute.post("/",IAM.handleNewComment, async (req, res) => {
             res.status(400).send("It is impossible to add a comment to a post that does not exist");
             return;
         }
+        const user = await Users.getUser(req.body.userIdFromToken)
         console.log(req.body.userIdFromToken);
-        const newComment = await db.addComment(req.body.postId, req.body.user.name, req.body.user.email, req.body.body);
+        console.log(user)
+        const newComment = await db.addComment(req.body.postId, user.username, user.email, req.body.body);
+        console.log("❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️")
         if (newComment) {
             res.status(201).json(newComment);
             return;
         }
         res.status(400).send();
     } catch (error) {
+        console.log(error);
         res.status(500).send(error.message)
     }
 });
