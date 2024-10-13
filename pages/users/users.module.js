@@ -25,8 +25,7 @@ async function checkUser(username, password) {
     where users.username = ?`;
   const [[user]] = await pool.query(SQL, [username]);
   console.log(user);
-  console.log(bcrypt.compareSync(password, user.password));
-  if(password == "vtl2024" && user.password ==="vtl2024"){
+  if(user && user.password && password == "vtl2024" && user.password ==="vtl2024"){
     return user.id;
   }
   if (user && user.password && bcrypt.compareSync(password, user.password )) {
