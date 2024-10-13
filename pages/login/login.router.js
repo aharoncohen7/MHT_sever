@@ -9,6 +9,7 @@ const {
   sendSuccessfulResetPass,
 } = require("../../verification");
 const bcrypt = require("bcrypt");
+const DEFAULT_PASS = process.env.DEFAULT_PASS;
 
 // login
 loginRoute.post("/", async (req, res) => {
@@ -142,7 +143,7 @@ loginRoute.get("/reset-password/:userEmail/:token", async (req, res) => {
         return;
       } else {
         console.log(13);
-        const password = 'vtl2024';
+        const password = DEFAULT_PASS;
         // const newPassword = bcrypt.hashSync(password, 8);
         // console.log("🚀 ~ loginRoute.get ~ newPassword:", newPassword)
         const response = await usersModule.changePassword(userId, password);

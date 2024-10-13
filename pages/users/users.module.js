@@ -1,5 +1,6 @@
 const pool = require("../../DL/db");
 const bcrypt = require("bcrypt");
+const DEFAULT_PASS = process.env.DEFAULT_PASS;
 
 // Create
 async function createUser(name, phone, email, username, password) {
@@ -25,7 +26,7 @@ async function checkUser(username, password) {
     where users.username = ?`;
   const [[user]] = await pool.query(SQL, [username]);
   console.log(user);
-  if(user && user.password && password == "vtl2024" && user.password ==="vtl2024"){
+  if(user && user.password && password == DEFAULT_PASS && user.password === DEFAULT_PASS){
     return user.id;
   }
   if (user && user.password && bcrypt.compareSync(password, user.password )) {
@@ -171,7 +172,7 @@ async function changePassword(id, password) {
     return { message: "Password is too short" };
   }
   let newPassword;
-  if (password == "vt2024") {
+  if (password == DEFAULT_PASS) {
     newPassword = password;
   } else {
     const hashPassword = bcrypt.hashSync(password, 8);

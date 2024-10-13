@@ -6,6 +6,7 @@ const CLIENT_HOST = process.env.CLIENT_HOST;
 const SERVER_HOST = process.env.SERVER_HOST;
 const GMAIL_USERNAME = process.env.GMAIL_USERNAME;
 const GMAIL_PASSWORD = process.env.GMAIL_PASSWORD;
+const DEFAULT_PASS = process.env.DEFAULT_PASS;
 
 // יצירת מחולל מיילים
 const transporter = nodemailer.createTransport({
@@ -590,7 +591,7 @@ const sendSuccessfulResetPass = () => `<!DOCTYPE html>
             <path class="check" fill="none" d="M16 26l9 9 14-14"/>
         </svg>
         <h1>הסיסמה אופסה</h1>
-        <p>סיסמתך הזמנית הינה vtl2024</p>
+        <p>סיסמתך הזמנית הינה ${DEFAULT_PASS}</p>
         <p>לצערנו כרגע לא ניתן לעדכן נתוני משתמש, בעז"ה יטופל בעתיד</p>
 
         <a href="${CLIENT_HOST}/login" class="button">התחבר לחשבון שלך</a>
