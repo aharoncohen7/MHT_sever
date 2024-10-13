@@ -11,7 +11,7 @@ async function getTag(id) {
 async function getAllTags() {
   const SQL = `select * from tags`;
   const [tags] = await pool.query(SQL);
-  // console.log(tags);
+  console.log(tags);
   return tags;
 }
 // כל התגיות של פוסט מסויים

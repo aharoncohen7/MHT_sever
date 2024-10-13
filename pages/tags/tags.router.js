@@ -5,6 +5,19 @@ const IAM = require('../../middlewares/monitoring');
 const tagsRoute = express.Router();
 
 
+// Get all tags 
+tagsRoute.get("/", async (req, res) => {
+    try {
+        const tags = await db.getAllTags();
+        if (tags) {
+            res.status(200).json(tags);
+            return;
+        }
+        res.status(404).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
 // Get all tags for a particular post
 tagsRoute.get("/:postId",IAM.validationParams, async (req, res) => {
     try {
