@@ -131,6 +131,7 @@ function handleUpdateUser(req, res, next) {
         username: Joi.string().max(20),
         phone: Joi.string().min(10).max(10),
         email: Joi.string().email(),
+        token: Joi.string().max(250),
         password: Joi.string()
             .pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9])(?!.*[\u0590-\u05FF])'))
             .min(6).max(10)

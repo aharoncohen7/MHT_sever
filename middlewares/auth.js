@@ -19,24 +19,32 @@ async function generateTokenForNewUser(email) {
         email,
         type: 'new-user'
     };
-    let token = jwt.sign(payload, SECRET, { expiresIn: "15m" });
+    let token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
     console.log(token)
     return token
 }
 
 
 
-function generateResetTokenForUser(user) {
+function generateResetTokenForUser(email) {
     const payload = {
-        id: user.id,
-        email: user.email,
-        type: 'password-reset'
+        email,
+        type: 'new-user'
     };
-
-    // יצירת טוקן עם תוקף של שעה
     const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
     return token;
 }
+// function generateResetTokenForUser(user) {
+//     const payload = {
+//         id: user.id,
+//         email: user.email,
+//         type: 'password-reset'
+//     };
+
+//     // יצירת טוקן עם תוקף של שעה
+//     const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
+//     return token;
+// }
 
 
 const verificationToken = (token)=>{

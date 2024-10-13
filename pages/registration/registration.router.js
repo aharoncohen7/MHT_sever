@@ -68,7 +68,7 @@ registrationRoute.post("/verification", async (req, res) => {
   }
 });
 
-// אימות אימייל
+//  לאחר לחיצת יוזר על הקישור במאימייל - אימות אימייל
 registrationRoute.get("/verify-email/:userEmail/:token", async (req, res) => {
   try {
     console.log(1);
@@ -104,7 +104,7 @@ registrationRoute.get("/verify-email/:userEmail/:token", async (req, res) => {
     if (verification.status === 200) {
       console.log(10);
       console.log(verification.user.email);
-      const activate = await usersModule.activateUser(verification.user.email);
+      const activate = await usersModule.activateUser(verification.user.email, 0);
       console.log(11);
       if (activate.status == 404) {
         console.log(12);
