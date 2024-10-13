@@ -634,13 +634,13 @@ async function sendPasswordResetEmail(userEmail, resetToken) {
               direction: rtl;
           }
           h1 {
-              color: #e74c3c;
+              color: #4365c9;
               margin-bottom: 20px;
           }
           .button {
               display: inline-block;
               padding: 10px 20px;
-              background-color: #e74c3c;
+              background-color: #4365c9;
               color: #ffffff;
               text-decoration: none;
               border-radius: 5px;
@@ -648,7 +648,7 @@ async function sendPasswordResetEmail(userEmail, resetToken) {
               margin-top: 20px;
           }
           .button:hover {
-              background-color: #c0392b;
+              background-color: #3150ab;
           }
           .footer {
               margin-top: 30px;
