@@ -95,13 +95,34 @@ async function isUserNameExists(username) {
 }
 
 //Get all users
+// async function getUsers() {
+//   // console.log("in getUsers() ");
+//   const SQL = `select * from defaultdb.users`;
+//   const [users] = await pool.query(SQL);
+//   // console.log(user);
+//   return users;
+// }
+
 async function getUsers() {
-  // console.log("in getUsers() ");
-  const SQL = `select * from defaultdb.users`;
+  const SQL = `
+    SELECT 
+      u.*, 
+      COUNT(p.id) AS posts_sum, 
+      MAX(p.created_at) AS last_post_date
+    FROM 
+      defaultdb.users u
+    LEFT JOIN 
+      defaultdb.posts p 
+    ON 
+      u.id = p.userId
+    GROUP BY 
+      u.id
+  `;
   const [users] = await pool.query(SQL);
-  // console.log(user);
+
   return users;
 }
+
 
 //Get specific user
 async function getUser(id) {
