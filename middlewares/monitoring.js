@@ -15,10 +15,12 @@ function checkPermission(req, res, next) {
         res.status(403).json({ error: error.details[0].message});
         return
     }
+    console.log("error2")
     if (((req.body.isAdmin > 0) || (req.params.userId == req.body.userIdFromToken))) {
         next();
     }
     else {
+        console.log("error")
         res.status(403).json({ error: 'Permission denied' });
     }
 }
@@ -31,7 +33,7 @@ function checkAdminPermission(req, res, next) {
         userIdFromToken: Joi.number().min(0).messages({
             "string.min": "מספר מזהה לא תקין",
         }),
-        permission: Joi.number().min(-5).max(3).required(),
+        permission: Joi.number().min(-5).max(3),
         username: Joi.string(),
         isAdmin: Joi.number().min(0).max(3).required()
         .messages({
@@ -46,6 +48,7 @@ function checkAdminPermission(req, res, next) {
         return
     }
     if (req.body.isAdmin > 0) {
+        
         next();
     }
     else {

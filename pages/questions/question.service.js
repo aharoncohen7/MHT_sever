@@ -38,6 +38,25 @@ const create = async (body) => {
     }
   
 }
+const getQuestions = async () => {
+    // await new Promise((resolve, reject) => { setTimeout(resolve, 1000 * 3) })
+    try {
+        await connect()
+        const allQuestion = await QuestionController.read();
+        console.log("333333")
+
+        if (allQuestion.length) {
+            return { success: true, message: 'בקשתך נענתה, להלן רשימת השאלות', questions: allQuestion };
+        }
+        else{
+            return { success: false, message: 'אירעה שגיאה - אנא נסה שוב מאוחר יותר' };
+        }
+    } catch (error) {
+        console.log({ error })
+        return { success: false, message: error.message };
+    }
+  
+}
 
 
-module.exports ={create}
+module.exports ={create, getQuestions}
