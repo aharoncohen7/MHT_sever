@@ -19,7 +19,7 @@ loginRoute.post("/", async (req, res) => {
       req.body.password
     );
     if (!check) {
-      res.status(404).send("user not found");
+      res.status(404).send("משתמש לא נמצא");
       return;
     }
     const user = await usersModule.getUser(parseFloat(check));
@@ -30,6 +30,10 @@ loginRoute.post("/", async (req, res) => {
       }
       if (user.isAdmin == -2) {
         res.status(403).send("המערכת ממתינה לשחזור הסיסמה שלך");
+        return;
+      }
+      if (user.isAdmin == -5) {
+        res.status(404).send("משתמש לא קיים");
         return;
       }
       const token = await auth.generateToken(user);

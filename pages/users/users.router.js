@@ -116,14 +116,15 @@ usersRoute.patch("/change-password/:userId",
 // TODO: לבקש שם מתשמש וסיסמה, באמצעותם למצוא יוזר
 usersRoute.delete("/:userId", IAM.validationParams,IAM.checkPermission, async (req, res) => {
     try {
-        const deletedUser = await usersModule.deleteUser(req.params.userId);
+        const deletedUser = await usersModule.deleteUserForEver(req.params.userId);
         if (deletedUser) {
             res.json(deletedUser);
             return;
         }
         res.status(404).send("תקלה לא מזוהה בעת מחיקת משתמש");
     } catch (error) {
-        res.status(500).send();
+        console.log(error)
+        res.status(500).send(error);
     }
 });
 

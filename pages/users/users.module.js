@@ -123,6 +123,52 @@ async function getUsers() {
   return users;
 }
 
+async function getActiveUsers() {
+  const SQL = `
+  SELECT 
+    u.*, 
+    COUNT(p.id) AS posts_sum, 
+    MAX(p.created_at) AS last_post_date
+  FROM 
+    defaultdb.users u
+  LEFT JOIN 
+    defaultdb.posts p 
+  ON 
+    u.id = p.userId
+  WHERE 
+    u.isAdmin > -3
+  GROUP BY 
+    u.id
+`;
+
+  const [users] = await pool.query(SQL);
+
+  return users;
+}
+
+async function getDeletedUsers() {
+  const SQL = `
+  SELECT 
+    u.*, 
+    COUNT(p.id) AS posts_sum, 
+    MAX(p.created_at) AS last_post_date
+  FROM 
+    defaultdb.users u
+  LEFT JOIN 
+    defaultdb.posts p 
+  ON 
+    u.id = p.userId
+  WHERE 
+    u.isAdmin = -5
+  GROUP BY 
+    u.id
+`;
+
+  const [users] = await pool.query(SQL);
+
+  return users;
+}
+
 
 //Get specific user
 async function getUser(id) {
@@ -267,6 +313,21 @@ async function activateUser(email, permission) {
 // DELETE
 async function deleteUser(userId) {
   const deletedUser = await getUser(userId);
+  const response = await setPermission(-5, userId);
+  if (response) {
+    console.log(response);
+    console.log(`User ${deletedUser.username} has been deleted`);
+    return deletedUser;
+  } else {
+    console.log("User not found");
+    return null;
+  }
+}
+
+async function deleteUserForEver(userId) {
+  const deletedUser = await getUser(userId);
+  await pool.query("DELETE FROM defaultdb.comments WHERE userId = ?", [userId]);
+  await pool.query("DELETE FROM defaultdb.posts WHERE userId = ?", [userId]);
   const query = `delete from defaultdb.users where id = ?`;
   const [response] = await pool.query(query, [userId]);
   if (response) {
@@ -300,6 +361,9 @@ module.exports = {
   deleteUser,
   activateUser,
   isUserNameExists,
+  getActiveUsers,
+  getDeletedUsers,
+  deleteUserForEver
 };
 
 //השגת סיסמה באמצעות ID
