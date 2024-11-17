@@ -166,7 +166,7 @@ function handleNewPost(req, res, next) {
     const schema = Joi.object({
         selectedBook: Joi.string().max(40).required(),
         selectedPortion: Joi.string().max(40).required(),
-        title: Joi.string().max(60).required(),
+        title: Joi.string().max(120).required(),
         body: Joi.string().max(100000).required(),
         userId: Joi.number().min(1).required(),
         tags: Joi.array().items(Joi.string().max(20)),
