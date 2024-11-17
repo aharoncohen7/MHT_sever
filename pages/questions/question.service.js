@@ -38,11 +38,11 @@ const create = async (body) => {
     }
   
 }
-const getQuestions = async () => {
+const get = async () => {
     // await new Promise((resolve, reject) => { setTimeout(resolve, 1000 * 3) })
     try {
         await connect()
-        const allQuestion = await QuestionController.read();
+        const allQuestion = await QuestionController.read({isActive: true});
         console.log("333333")
 
         if (allQuestion.length) {
@@ -59,4 +59,20 @@ const getQuestions = async () => {
 }
 
 
-module.exports ={create, getQuestions}
+async function updateById(id, data) {
+    console.log("in update Question", data);
+    let updatedQuestion = await QuestionController.update(id, data)
+    console.log("🚀 ~ updateById ~ updatedQuestion:", updatedQuestion)
+    return updatedQuestion
+  }
+
+async function deleteById(id) {
+    console.log("in delete Question", id);
+    let updatedQuestion = await QuestionController.update(id, {isActive: false})
+    console.log("🚀 ~ deleteById ~ updatedQuestion:", updatedQuestion)
+    
+    return updatedQuestion
+  }
+
+
+module.exports ={create, get, updateById, deleteById}

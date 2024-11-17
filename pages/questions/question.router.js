@@ -4,7 +4,7 @@ const express = require("express");
 const QuestionService = require("./question.service");
 const questionRoute = express.Router();
 
-// Get all question
+// create question
 questionRoute.post("/", async (req, res) => {
     try {
         const question = await QuestionService.create(req.body);
@@ -20,10 +20,10 @@ questionRoute.post("/", async (req, res) => {
 
 
 
-// Get all question
+// Get all questions
 questionRoute.get("/",validate, IAM.checkAdminPermission, async (req, res) => {
     try {
-        const questions = await QuestionService.getQuestions();
+        const questions = await QuestionService.get();
         if (questions) {
             res.status(200).json(questions);
             return;
@@ -34,25 +34,42 @@ questionRoute.get("/",validate, IAM.checkAdminPermission, async (req, res) => {
     }
 });
 
-// //adding tags
-// questionRoute.post("/", async (req, res) => {
-//     try {
-//         const isPostExist = await db2.isPostExist(req.body.postId)
-//         if(!isPostExist) {
-//             res.status(400).send("It is impossible to add a tags to a post that does not exist");
-//         }
-//             const [newTags] = await db.addTagsToPost(req.body.postId, req.body.tags);
-//         if (newTags) {
-//             res.status(201).json(newTags);
-//             return;
-//         }
-//         res.status(400).send();
-//     } catch (error) {
-//         res.status(500).send(error.message)
-//     }
-// });
+
+//update status
+questionRoute.put("/:questionId",
+    validate, IAM.checkAdminPermission, 
+    async (req, res) => {
+    console.log("start update question");
+    const questionId = req.params.questionId;
+    const status = req.body.status;
+    try {
+        const updatedQuestion = await QuestionService.updateById(questionId, {status})
+        console.log(updatedQuestion);
+        res.status(200).send(updatedQuestion)
+    }
+    catch (err) {
+        res.status(400).send(err.msg || err.message || "wrong")
+    }
+});
 
 
+
+//delete (update)
+questionRoute.delete("/:questionId",
+    validate, IAM.checkAdminPermission, 
+    async (req, res) => {
+    console.log("start delete question");
+    const questionId = req.params.questionId;
+    try {
+        const updatedQuestion = await QuestionService.deleteById(questionId)
+        console.log(updatedQuestion);
+        res.status(200).send(updatedQuestion)
+    }
+    catch (err) {
+        res.status(400).send(err.msg || err.message || "wrong")
+    }
+});
+   
 
 module.exports = questionRoute;
 

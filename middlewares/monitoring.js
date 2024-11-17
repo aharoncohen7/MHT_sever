@@ -40,6 +40,7 @@ function checkAdminPermission(req, res, next) {
             "string.min": "גישה נדחתה - אין הרשאה",
             "string.max": "הרשאה לא תקינה"
         }),
+        status: Joi.string().valid('pending', 'answered', 'closed').optional(),
     })
     const { error } = schema.validate(req.body);
     if (error) {
