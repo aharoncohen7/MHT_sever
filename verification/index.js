@@ -22,13 +22,13 @@ async function sendVerificationEmail(userEmail, VerifiedToken) {
   const mailOptions = {
     from: GMAIL_USERNAME,
     to: userEmail,
-    subject: "Vortly - אשר את כתובת המייל שלך",
+    subject: "VORTLY - אשר את כתובת הדוא''ל שלך",
     html: `<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>אימות חשבון</title>
+    <title>אימות כתובת הדוא''ל</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -101,7 +101,7 @@ const sendVerificationFailureEmail = () => `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>כשל באימות חשבון</title>
+    <title>כשל באימות הדוא''ל</title>
     <style>
         body {
             font-family: Arial, sans-serif;
